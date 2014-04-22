@@ -12,7 +12,7 @@ var game = {
         // If the URL ends with "#debug", enable the MelonJS debug panel
         if (document.location.hash === "#debug") {
             window.onReady(function() {
-                me.plugin.register.defer(debugPanel, "debug");
+                me.plugin.register.defer(this, this.debugPanel, "debug");
             });
         }
 
@@ -22,8 +22,11 @@ var game = {
     },
 
     loaded: function() {
-        me.state.set(me.state.MENU, new game.TitleScreen());
-        me.state.change(me.state.MENU);
+        me.state.set(me.state.READY, new game.TitleScreen());
+        me.state.set(me.state.MENU, new game.MainMenu());
+        me.state.set(game.states.STATE_LEVEL_4_1, new game.Level4.MiniGame1());
+
+        me.state.change(me.state.READY);
     }
 };
 
@@ -44,6 +47,14 @@ game.TitleScreen = me.ScreenObject.extend({
             this.title = me.loader.getImage("cmmi_levels");
             this.font = new me.BitmapFont("32x32_font", 32);
             this.scrollerfont = new me.BitmapFont("32x32_font", 32);
+
+            me.input.bindKey(me.input.KEY.ENTER, "enter", true);
+            
+            this.handler = me.event.subscribe(me.event.KEYDOWN, function (action, keyCode, edge) {
+                if (action === "enter") {
+                    me.state.change(me.state.MENU);
+                }
+            });
         }
 
         this.scrollertween = new me.Tween(this);
@@ -81,5 +92,11 @@ game.resources = [
         name: "32x32_font",
         type: "image",
         src: "images/32x32_font.png"
-    }
+    },
+
+    {
+        name: "button_background",
+        type: "image",
+        src: "images/button.png"
+    },
 ];

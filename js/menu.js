@@ -14,8 +14,6 @@ LevelButton = me.GUI_Object.extend({
         this.text = text.toUpperCase();
     },
 
-    clickable: true,
-
     onClick: function() {
         me.state.change(this.state);
         return false;
@@ -46,14 +44,14 @@ game.MainMenu = me.ScreenObject.extend({
             new LevelButton(350, 300, "Level 5.1", this.font, game.states.STATE_LEVEL_5_1),
             new LevelButton(350, 350, "Level 5.2", this.font, game.states.STATE_LEVEL_5_2),
         ];
-        
+
         for (var i = 0; i < this.buttons.length; i++) {
             me.game.world.addChild(this.buttons[i]);
         }
     },
 
     onDestroyEvent: function() {
-        for (var i in this.buttons) {
+        for (var i = 0; i < this.buttons.length; i++) {
             me.game.world.removeChild(this.buttons[i]);
         }
     },

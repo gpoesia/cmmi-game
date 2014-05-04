@@ -24,6 +24,13 @@ var game = {
     loaded: function() {
         me.state.set(me.state.READY, new game.TitleScreen());
         me.state.set(me.state.MENU, new game.MainMenu());
+
+        // level 3 entities
+        me.entityPool.add("hero", game.HeroEntity);
+        me.entityPool.add("girl", game.GirlEntity);
+
+        me.state.set(game.states.STATE_LEVEL_3_0_INIT, new game.Level3.MiniGame0());
+        me.state.set(game.states.STATE_LEVEL_3_1, new game.Level3.MiniGame1());
         me.state.set(game.states.STATE_LEVEL_4_1, new game.Level4.MiniGame1());
 
         me.state.change(me.state.READY);
@@ -98,5 +105,30 @@ game.resources = [
         name: "button_background",
         type: "image",
         src: "images/button.png"
+    },
+
+    {
+        name: "girl", 
+        type:"image", 
+        src: "data/img/girl.png"
+    },
+    
+    {
+        name: "boy",
+        type:"image",
+        src: "data/img/boy.png"
+    },
+    
+    {
+        name: "TileA2",
+        type:"image",
+        src: "data/map/tileset/TileA2.png"
+    },
+    
+    /* Maps */
+    {
+        name: "town",
+        type: "tmx",
+        src: "data/map/town.tmx"
     },
 ];

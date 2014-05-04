@@ -16,5 +16,7 @@ function addGameState(name) {
 // For instance, STATE_LEVEL_4_2_INIT is the explanation text state for the
 // second mini-game for the game level corresponding to CMMI Level 4
 
+addGameState("STATE_LEVEL_3_0_INIT");
+addGameState("STATE_LEVEL_3_1");
 addGameState("STATE_LEVEL_4_1");
 addGameState("STATE_LEVEL_4_1_PLAY");

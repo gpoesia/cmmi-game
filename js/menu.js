@@ -35,10 +35,13 @@ game.MainMenu = me.ScreenObject.extend({
     },
 
     onResetEvent: function() {
+        this.screenCleared = false;
+
         this.font = new me.Font("Sans", "25px", "white", "center");
         this.titleFont = new me.Font("Verdana", "35px", "blue", "left");
 
         this.buttons = [
+            new LevelButton(350, 150, "Level 3", this.font, game.states.STATE_LEVEL_3_0_INIT),
             new LevelButton(350, 200, "Level 4.1", this.font, game.states.STATE_LEVEL_4_1),
             new LevelButton(350, 250, "Level 4.2", this.font, game.states.STATE_LEVEL_4_2),
             new LevelButton(350, 300, "Level 5.1", this.font, game.states.STATE_LEVEL_5_1),

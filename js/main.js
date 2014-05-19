@@ -32,6 +32,7 @@ var game = {
         me.state.set(game.states.STATE_LEVEL_3_0_INIT, new game.Level3.MiniGame0());
         me.state.set(game.states.STATE_LEVEL_3_1, new game.Level3.MiniGame1());
         me.state.set(game.states.STATE_LEVEL_4_1, new game.Level4.MiniGame1());
+        me.state.set(game.states.STATE_LEVEL_5_1, new game.Level5.MiniGame1());
 
         me.state.change(me.state.READY);
     }
@@ -56,7 +57,7 @@ game.TitleScreen = me.ScreenObject.extend({
             this.scrollerfont = new me.BitmapFont("32x32_font", 32);
 
             me.input.bindKey(me.input.KEY.ENTER, "enter", true);
-            
+
             this.handler = me.event.subscribe(me.event.KEYDOWN, function (action, keyCode, edge) {
                 if (action === "enter") {
                     me.state.change(me.state.MENU);
@@ -90,7 +91,7 @@ game.TitleScreen = me.ScreenObject.extend({
 
 game.resources = [
     {
-        name: "cmmi_levels", 
+        name: "cmmi_levels",
         type: "image",
         src: "images/cmmi_levels.png"
     },
@@ -108,27 +109,39 @@ game.resources = [
     },
 
     {
-        name: "girl", 
-        type:"image", 
+        name: "girl",
+        type:"image",
         src: "data/img/girl.png"
     },
-    
+
     {
         name: "boy",
         type:"image",
         src: "data/img/boy.png"
     },
-    
+
     {
         name: "TileA2",
         type:"image",
         src: "data/map/tileset/TileA2.png"
     },
-    
+
+    {
+        name: "clock2_resizedbg",
+        type: "image",
+        src: "data/map/tileset/clock2_resizedbg.png"
+    },
+
     /* Maps */
     {
         name: "town",
         type: "tmx",
         src: "data/map/town.tmx"
+    },
+
+    {
+      name: "clock",
+      type: "tmx",
+      src: "data/map/clock.tmx"
     },
 ];

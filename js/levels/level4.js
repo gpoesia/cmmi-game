@@ -72,6 +72,27 @@ function watchSliderValue(id, paragraphId, suffix) {
     $(id).slider("option", "value", $(id).slider("option", "min"));
 }
 
+function WatchGoalValue(valueId, scoreId, isMaximum, goal, min, max) {
+
+    $("#" + valueId).html(goal);
+
+    function update() {
+        value = $("#" + valueId);
+
+        scoreValue = parseInt($("#" + scoreId).html());
+
+        if (!isNaN(scoreValue) && ((value < goal && isMaximum) ||
+                (value > goal && !isMaximum))) {
+            $("#" + scoreId).html(scoreValue - 1);
+        }
+
+        $("#" + valueId).html(Math.round(Math.random() * (max - min) + min));
+        setTimeout(update, 5000);
+    }
+
+    setTimeout(update, 3000);
+}
+
 
 game.Level4 = {
 
@@ -94,6 +115,19 @@ game.Level4 = {
                          "Seu objetivo, então, é definir metas realistas e que possibilitem que o desenvolvimento se oriente " +
                              "para o desenvolvimento de software de qualidade, que atenda aos objetivos tanto do cliente quanto " +
                              "da sua empresa. Preparado?"],
+
+    MiniGame2Messages: ["Definir metas já foi difícil. Mas só as metas não bastam para atingir o nível 4 " +
+                            "de maturidade no desenvolvimento de software segundo o modelo de referência CMMI.",
+                        "Além das metas, é preciso acompanhar, quantitativamente, o andamento do projeto. Tendo " +
+                            "medidas não favoráveis, é preciso tomar atitudes - caso contrário, de que adianta medir?",
+                        "Completar esta tarefa com sucesso mostrará que você atingiu a Meta Específica SG 2 da área de processo " +
+                            "Quantitative Project Management (QPM) do nível 4 do CMMI. Para tal, você deve acompanhar os valores " +
+                            "sendo medidos durante o projeto e compará-los com a meta que você definiu anteriormente. Se um valor " +
+                            "mostrar que o projeto está falhando por não atingir uma meta, rapidamente clique no botão " +
+                            "correspondente à meta para tomar alguma atitude e normalizar seu valor.",
+                        "Você ganhará um ponto para cada atitude correta que tomar. Depois de um determinado tempo, " +
+                            "os indicadores são medidos novamente. Se algum estiver abaixo da meta e você não tiver tomado " +
+                            "atitude, você perderá um ponto. Preparado? Quando estiver pronto, clique em \"Próximo\"."],
 
     MiniGame1: me.ScreenObject.extend({
         init: function() {
@@ -214,5 +248,118 @@ game.Level4 = {
         },
 
     }),
+
+    MiniGame2: me.ScreenObject.extend({
+        init: function() {
+        },
+
+        onResetEvent: function() {
+            HideMelonJS();
+            $("#game").append("<div id='level4'></div>");
+            self = this;
+            ShowPrologue("level4", game.Level4.MiniGame2Messages, function() { self.play(); });
+        },
+
+        onDestroyEvent: function() {
+            ShowMelonJS();
+            $("#level4").replaceWith("");
+        },
+
+        play: function() {
+            $("#level4").append("<p>Gestão Quantitativa! Observe os valores dos indicadores de desempenho " +
+                "sendo medidos constantemente nos projetos. Quando algum indicador ficar pior que o valor " +
+                "de referência, que você definiu, clique no botão correspondente para tomar alguma atitude. ",
+                "<p> Pontos: <span id='score'>0</span>",
+                "<p>Número máximo de bugs por ponto de função: <span id='bp'></span>" +
+                "<input value='Tomar atitude!' type='button' id='bt_bp'/></p>",
+                "<p>Fração mínima do código coberta por testes automatizados: <span id='cc'></span>" +
+                "<input value='Tomar atitude!' type='button' id='bt_cc'/></p>",
+                "<p>Fração mínima do código revisada por um desenvolvedor que não escreveu o código: <span id='cr'></span>" +
+                "<input value='Tomar atitude!' type='button' id='bt_cr'/></p>",
+                "<p>Máximo de horas por ponto de função: <span id='hp'></span>" +
+                "<input value='Tomar atitude!' type='button' id='bt_hp'/></p>",
+                "<p>Fração máxima dos requisitos que precisaram de revisão durante o projeto: <span id='rr'></span>" +
+                "<input value='Tomar atitude!' type='button' id='bt_rr'/></p>");
+
+            WatchGoalValue("bp", "score", true, 4, 0, 10);
+            WatchGoalValue("cc", "score", false, 60, 0, 100);
+            WatchGoalValue("cr", "score", false, 60, 0, 100);
+            WatchGoalValue("hp", "score", true, 10, 0, 40);
+            WatchGoalValue("rr", "score", false, 25, 0, 100);
+
+            self = this;
+        },
+
+        evaluateQuantitativeGoals: function() {
+            bugsPerFP = $("#slider_bp").slider("option", "value");
+            testCodeCoverage = $("#slider_cc").slider("option", "value");
+            reviewCodeCoverage = $("#slider_cr").slider("option", "value");
+            hoursPerFP = $("#slider_hp").slider("option", "value");
+            requirementsChanged = $("#slider_rr").slider("option", "value");
+
+            if (Math.random() < 0.9 && bugsPerFP < 3) {
+                alert("Que pena... Seus programadores normalmente erram mais de " + bugsPerFP +
+                        " vez" + (bugsPerFP < 2 ? "" : "es") +
+                        " por ponto de função. Assim, ficaram com muito medo de submeter código " +
+                        " e o projeto foi atrasado por isso. Tente novamente.");
+            } else if (Math.random() < 0.7 && bugsPerFP > 7) {
+                alert("Seus programadores pensaram que, podendo cometer até " + bugsPerFP +
+                        " bugs em cada ponto de função, poderiam se passar por " +
+                        " produtivos submetendo código várias vezes ao dia. Porém, com tamanha " +
+                        " falta de cuidado, os bugs foram acumulando e o final do projeto foi " +
+                        " um caos... Tente novamente com outras metas.");
+            } else if (Math.random() < 0.5 && testCodeCoverage > 95) {
+                alert("Os desenvolvedores ficaram responsáveis por escrever testes para pelo menos " +
+                        testCodeCoverage + "% do código da aplicação. Mas isto tomou tempo demais!" +
+                        " O cliente queria ver seu software funcionando, mas você só entregou o produto" +
+                        " depois de que houvessem testes para os testes dos testes! Com isso, o projeto" +
+                        " não terminou como você gostaria... É melhor rever suas metas.");
+            } else if (Math.random() < 0.8 && testCodeCoverage < 20) {
+                alert("Você praticamente isentou seus desenvolvedores de escreverem testes " +
+                        "automatizados, não é? Isto não foi prudente. Vários bugs que atrasaram o projeto" +
+                        " poderiam ter sido detectados por testes feitos mais cedo. Tente outra vez.");
+            } else if (Math.random() > testCodeCoverage / 100) {
+                alert("Seus testes automatizados foram um sucesso. Ou quase. O problema estava nos " +
+                        (100 - testCodeCoverage) + "% do código não testado. Lá estava ele, o maior bug " +
+                        "que sua empresa já viu. Foram " + Math.floor((100 - testCodeCoverage) / 3.4) + " dias " +
+                        "de atraso por causa dele. Melhor rever isto.");
+            } else if (Math.random() > reviewCodeCoverage / 100) {
+                alert("Às vezes a sorte está do nosso lado. Às vezes não. Os testes automatizados não " +
+                        " detectaram um bug, que por azar estava nos " +
+                        (100 - testCodeCoverage) + "% do código não revisado por um desenvolvedor fora " +
+                        "o próprio autor. Lá estava ele, o maior bug " +
+                        "que sua empresa já viu. Foram " + Math.floor((100 - reviewCodeCoverage) / 2.3)  + " dias " +
+                        "de atraso por causa dele. Nunca mais subestime a revisão de código.");
+            } else if (Math.random() < 0.75 && hoursPerFP > 10) {
+                alert("Pelo visto, você é uma pessoa bastante generosa. Seus desenvolvedores ficaram felizes " +
+                        "por terem " + hoursPerFP + " horas por ponto de função para implementarem o software. " +
+                        "Mas seu cliente não é tão generoso assim, e está bravo porque queria o produto " +
+                        "ontem! E você nem sabe que dia irá acabar. Às vezes, é preciso der um pouco duro...");
+            } else if (Math.random() < 0.75 && hoursPerFP < 3) {
+                alert("Você bem que tentou, mas não conseguiu transformar seus desenvolvedores em ninjas." +
+                        " E assim, eles não implementaram as funcionalidades em " + hoursPerFP + " horas" +
+                        " por ponto de função. Com isto, de acordo com as metas estabelecidas, o projeto " +
+                        "foi um fracasso. Além disso, com tanto stress da equipe, você precisou dar uma " +
+                        "semana de férias para todos. Que desastre...");
+            } else if (Math.random() / 2 > requirementsChanged) {
+                alert("Seus analistas bem que tentaram. Mas é muito difícil entender o cliente, e eles " +
+                        "precisaram de reuniões demais para conseguirem definir os requisitos de forma " +
+                        "que menos de " + requirementsChanged + "% deles precisassem ser alterados. Mas " +
+                        "o cliente reclamou do tempo que levou para entrarem em acordo sobre os requisitos, " +
+                        "e isto impactou negativamente a imagem da empresa. Melhor mudar as metas - e o " +
+                        "cliente, que já disse que não quer mais te contratar.");
+            } else {
+                alert("Excelente! Seu projeto foi um sucesso! As metas garantiram que o produto tivesse " +
+                        "qualidade suficiente para ser aprovado pelo cliente e que tudo corresse dentro do " +
+                        "prazo combinado. Sua empresa já atingiu a meta do CMMI nível 4 " +
+                        "'Establish Performance Baselines and Models'. Parabéns!");
+                return true;
+            }
+
+            return false;
+        },
+
+    }),
+
 };
 

@@ -32,6 +32,7 @@ var game = {
         me.state.set(game.states.STATE_LEVEL_3_0_INIT, new game.Level3.MiniGame0());
         me.state.set(game.states.STATE_LEVEL_3_1, new game.Level3.MiniGame1());
         me.state.set(game.states.STATE_LEVEL_4_1, new game.Level4.MiniGame1());
+        me.state.set(game.states.STATE_LEVEL_4_2, new game.Level4.MiniGame2());
         me.state.set(game.states.STATE_LEVEL_5_1, new game.Level5.MiniGame1());
 
         me.state.change(me.state.READY);

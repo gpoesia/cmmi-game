@@ -41,6 +41,7 @@ game.MainMenu = me.ScreenObject.extend({
         this.titleFont = new me.Font("Verdana", "35px", "blue", "left");
 
         this.buttons = [
+            new LevelButton(350, 100, "Level 1", this.font, game.states.STATE_LEVEL_1),
             new LevelButton(350, 150, "Level 3", this.font, game.states.STATE_LEVEL_3_0_INIT),
             new LevelButton(350, 200, "Level 4.1", this.font, game.states.STATE_LEVEL_4_1),
             new LevelButton(350, 250, "Level 4.2", this.font, game.states.STATE_LEVEL_4_2),

@@ -73,6 +73,262 @@ game.BaseEntity = me.ObjectEntity.extend({
     },    
 });
 
+var BackgroundLayer = me.ImageLayer.extend({
+  init: function(image, z, speed) {
+    name = image;
+    width = 900;
+    height = 600;
+    ratio = 1;
+    this.fixed = speed > 0 ? false : true;
+    // call parent constructor
+    this.parent(name, width, height, image, z, ratio);
+  },
+
+  update: function() {
+    if (!this.fixed) {
+      if (this.pos.x >= this.imagewidth - 1)
+        this.pos.x = 0;
+      this.pos.x += this.speed;
+    }
+    return true;
+  }
+});
+
+// Level 1 entities
+
+game.HUDL1 = game.HUD || {};
+
+game.HUDL1.Container = me.ObjectContainer.extend({
+
+  init: function() {
+    // call the constructor
+    this.parent();
+
+    // persistent across level change
+    this.isPersistent = true;
+
+    // non collidable
+    this.collidable = false;
+
+    // make sure our object is always draw first
+    this.z = Infinity;
+
+    // give a name
+    this.name = "HUD";
+
+    // add our child score object at the top left corner
+    for (i = 0; i < game.ItemL1Types.length; i++)
+        this.addChild(new game.HUDL1.ScoreItem((i+1)*100, 5, game.ItemL1Types[i]));
+  }
+});
+
+game.HUDL1.ScoreItem = me.Renderable.extend({
+  /**
+   * constructor
+   */
+  init: function(x, y, itemType) {
+    this.x = x;
+    this.y = y;
+    this.itemType = itemType;
+    
+    // call the parent constructor
+    // (size does not matter here)
+    this.parent(new me.Vector2d(x, y), 10, 10);
+
+    // local copy of the global score
+    this.scoreFont = new me.Font('gamefont', 50, '#000', 'left');
+
+    // make sure we use screen coordinates
+    this.floating = true;
+  },
+
+  update: function() {
+    return true;
+  },
+
+  draw: function (context) {
+    if (true){
+        this.scoreFont.draw(context, game.Level1.scores[this.itemType], this.x, 10);
+    }
+  }
+});
+
+
+game.PlayerL1Entity = me.ObjectEntity.extend({
+    init: function(x, y) {
+          var settings = {};
+          settings.image = me.loader.getImage('player_l1');
+          settings.width = 85;
+          settings.height = 60;
+          settings.spritewidth = 85;
+          settings.spriteheight = 60;
+
+          this.parent(x, y, settings);
+          this.alwaysUpdate = true;
+          this.collidable = true;
+          this.gravity = 0.98;
+          this.maxVel = 7;
+
+          this.renderable.addAnimation("idle", [0]);
+          this.renderable.addAnimation("running", [0, 1, 2]);
+          this.renderable.setCurrentAnimation("idle");
+          this.animation = "idle";
+
+          this.addShape(new me.Rect(new me.Vector2d(0, 0), 70, 50));
+    },
+
+    update: function(dt) {
+          if (me.input.isKeyPressed('left')) {
+              // Filp the sprite horizontally
+              this.flipX(true);
+              // update player's acceleration
+              this.accel.x = -1;
+          } else if (me.input.isKeyPressed('right')) {
+              // Unflip sprite horizontally
+              this.flipX(false);
+              // update player's acceleration
+              this.accel.x = 1;
+          } else {
+              // Make the playyer stop gradually
+              if (this.vel.x > 0.5)
+                  this.accel.x = -0.2;
+              else if (this.vel.x < -0.5)
+                  this.accel.x = 0.2;
+              else {
+                  this.accel.x = 0;
+                  this.vel.x = 0;
+              }
+          }
+
+          if (me.input.isKeyPressed('space') && !(this.jumping || this.falling)) {
+            this.jumping = true;
+            this.accel.y = -5;
+          } else if (this.accel.y < 0){
+            this.accel.y += 0.7;
+          }
+
+          // Update player's velocity
+          this.vel.x += this.accel.x * me.timer.tick;
+          this.vel.y += this.accel.y * me.timer.tick;
+          
+          // Avoid passing the maximum speed
+          this.vel.x = Math.min(this.vel.x, this.maxVel);
+          this.vel.x = Math.max(this.vel.x, (-this.maxVel));
+
+          // Check end of screen
+          if ((this.pos.x <= 0 && this.vel.x < 0) || (this.pos.x >= (me.game.viewport.width - this.width) && this.vel.x > 0))
+              this.vel.x = 0;
+ 
+          // Update player's position
+          // Function ComputeVelocity considers physics interactions
+          this.computeVelocity(this.vel);
+          if ((this.pos.y + this.vel.y) > 442) {
+              this.vel.y = (442 - this.pos.y);
+              this.falling = false;
+          }
+          this.pos.add(this.vel);
+
+          // Update object animation
+          if (this.vel.x != 0 && this.animation == "idle"){
+              this.animation = "running";
+              this.renderable.setCurrentAnimation("running");
+          } else if (this.vel.x == 0 && this.animation == "running"){
+              this.animation = "idle";
+              this.renderable.setCurrentAnimation("idle");
+          }
+
+          this.parent(dt);
+          return true;
+    },
+
+});
+
+game.ItemL1Types = ["book", "deadline", "cost", "cucumber"];//{book : 0, deadline : 1, cost : 2, cucumber : 3};
+
+game.ItemL1Entity = me.CollectableEntity.extend({
+    init: function(x, y, type) {
+        var settings = {};
+        this.itemType = type;
+        console.log("tipo: "+this.itemType);
+        settings.image = me.loader.getImage('item_l1_'+this.itemType);
+        settings.width = 40;
+        settings.height = 33;
+        settings.spritewidth = 40;
+        settings.spriteheight = 33;
+
+        this.parent(x, y, settings);
+        this.alwaysUpdate = true;
+        this.gravity = 0.1;
+        this.collidable = true;
+        this.setVelocity(0, 3);
+        this.addShape(new me.Rect(new me.Vector2d(0, 0), 40, 33));
+   },
+
+    update: function(dt) {
+        // Update item's position
+        this.computeVelocity(this.vel);
+        this.pos.add(this.vel);
+ 
+        // Treat collisions
+        var res = me.game.collide(this);
+        if (res) {
+            this.collidable = false;
+            me.game.remove(this);
+            if (this.pos.y < 471) {
+                console.log("colidiu! tipo: "+this.itemType);
+                game.Level1.scores[game.ItemL1Types[this.itemType]] += 1;
+            }
+        }
+
+        return true;
+    },
+
+});
+
+var ItemGenerator = me.Renderable.extend({
+    init: function() {
+        this.parent(new me.Vector2d(), me.game.viewport.width, me.game.viewport.height);
+        this.alwaysUpdate = true;
+        this.generate = 0;
+        this.itemFrequency = 90;
+        this.posY = 50;
+    },
+
+    update: function(dt) {
+        if ((this.generate++ % this.itemFrequency) == 0) {
+            var posX = Math.round((Math.random() * 1000) % me.game.viewport.width);
+            var type = Math.round((Math.random() * 10) % 1) + 0;
+            var item = new me.entityPool.newInstanceOf("item_l1", posX, this.posY, type);
+            console.log("Criando item... (tipo: "+type+")");
+            me.game.world.addChild(item, 10);
+        }
+        return true;
+    }
+});
+
+var GroundL1Entity = me.ObjectEntity.extend({
+    init: function(x, y) {
+        var settings = {};
+        settings.image = me.loader.getImage('ground_l1');
+        settings.width = me.game.viewport.width;
+        settings.height = 96;
+        settings.spritewidth = me.game.viewport.width;
+        settings.spriteheight = 96;
+
+        this.parent(x, y, settings);
+        this.alawaysUpdate = true;
+        this.gravity = 0;
+        this.collidable = true;
+        this.addShape(new me.Rect(new me.Vector2d(0, 0), me.game.viewport.width, 96));
+    },
+
+    update: function(){
+        return true;
+    }
+});
+
+// Level 3 entities
+
 game.HeroEntity = game.BaseEntity.extend({
   
     init: function(x, y, settings) {

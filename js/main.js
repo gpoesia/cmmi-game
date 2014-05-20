@@ -1,7 +1,7 @@
 var game = {
 
     // Global data, shared between levels
-    data : { },
+    data : {},
 
     onload: function() {
         if (!me.video.init("screen", 800, 600, true, 'auto')) {
@@ -24,11 +24,16 @@ var game = {
     loaded: function() {
         me.state.set(me.state.READY, new game.TitleScreen());
         me.state.set(me.state.MENU, new game.MainMenu());
+        
+        // Level 1 entities
+        me.entityPool.add("player_l1", game.PlayerL1Entity);
+        me.entityPool.add("item_l1", game.ItemL1Entity);
 
         // level 3 entities
         me.entityPool.add("hero", game.HeroEntity);
         me.entityPool.add("girl", game.GirlEntity);
 
+        me.state.set(game.states.STATE_LEVEL_1, new game.Level1.Game());
         me.state.set(game.states.STATE_LEVEL_3_0_INIT, new game.Level3.MiniGame0());
         me.state.set(game.states.STATE_LEVEL_3_1, new game.Level3.MiniGame1());
         me.state.set(game.states.STATE_LEVEL_4_1, new game.Level4.MiniGame1());
@@ -110,8 +115,40 @@ game.resources = [
     },
 
     {
-        name: "girl",
-        type:"image",
+        name: "getready",
+        type: "image",
+        src: "data/img/getready.png"
+    },
+
+    // Level 1 resources
+    {
+        name: "background_l1",
+        type: "image",
+        src: "data/img/background_l1.png"
+    },
+
+    {
+        name: "ground_l1",
+        type: "image",
+        src: "data/img/ground_l1.png"
+    },
+
+    {
+        name: "player_l1",
+        type: "image",
+        src: "data/img/player_l1.png"
+    },
+
+    {
+        name: "item_l1_0",
+        type: "image",
+        src: "data/img/item_l1_0.png"
+    },
+
+    // Level 3 resources
+    {
+        name: "girl", 
+        type: "image", 
         src: "data/img/girl.png"
     },
 

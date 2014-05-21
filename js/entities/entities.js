@@ -327,6 +327,71 @@ var GroundL1Entity = me.ObjectEntity.extend({
     }
 });
 
+// Level 2 entities
+
+game.PlayerL2Entity = me.ObjectEntity.extend({
+    init: function(x, y, settings) {
+          this.parent(x, y, settings);
+          this.gravity = 0;
+          
+          this.renderable.addAnimation("down", [0,1,2,3]);
+          this.renderable.addAnimation("left", [4,5,6,7]);
+          this.renderable.addAnimation("right", [8,9,10,11]);
+          this.renderable.addAnimation("up", [12,13,14,14]);
+
+          this.direction = "down";
+    },
+
+    update: function(dt) {
+          if (me.input.isKeyPressed('left')) {
+              // update player's acceleration
+              this.vel.x = -5;
+              this.vel.y = 0;
+              if (this.direction != "left") {
+                  this.direction = "left";
+                  this.renderable.setCurrentAnimation("left");
+              }
+          } else if (me.input.isKeyPressed('right')) {
+              // update player's acceleration
+              this.vel.x = 5;
+              this.vel.y = 0;
+              if (this.direction != "right") {
+                  this.direction = "right";
+                  this.renderable.setCurrentAnimation("right");
+              }
+          } else if (me.input.isKeyPressed('up')) {
+              // update player's acceleration
+              this.vel.x = 0;
+              this.vel.y = -5;
+              if (this.direction != "up") {
+                  this.direction = "up";
+                  this.renderable.setCurrentAnimation("up");
+              }
+          } else if (me.input.isKeyPressed('down')) {
+              // update player's acceleration
+              this.vel.x = 0;
+              this.vel.y = 5;
+              if (this.direction != "down") {
+                  this.direction = "down";
+                  this.renderable.setCurrentAnimation("down");
+              }
+          } else {
+              this.vel.x = 0;
+              this.vel.y = 0;
+          }
+
+          this.updateMovement();
+          
+          if (this.vel.x != 0 || this.vel.y != 0){
+            this.parent(dt);
+            return true;
+          }
+
+          return false;
+    },
+
+});
+
 // Level 3 entities
 
 game.HeroEntity = game.BaseEntity.extend({

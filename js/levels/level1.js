@@ -48,6 +48,7 @@ game.Level1 = {
     
         onDestroyEvent: function() {
             this.player = null;
+            me.game.world.removeChild(this.HUD);
         }
     }),
 };

@@ -29,11 +29,15 @@ var game = {
         me.entityPool.add("player_l1", game.PlayerL1Entity);
         me.entityPool.add("item_l1", game.ItemL1Entity);
 
+        // LEvel 2 entities
+        me.entityPool.add("player_l2", game.PlayerL2Entity);
+
         // level 3 entities
         me.entityPool.add("hero", game.HeroEntity);
         me.entityPool.add("girl", game.GirlEntity);
 
         me.state.set(game.states.STATE_LEVEL_1, new game.Level1.Game());
+        me.state.set(game.states.STATE_LEVEL_2, new game.Level2.Game());
         me.state.set(game.states.STATE_LEVEL_3_0_INIT, new game.Level3.MiniGame0());
         me.state.set(game.states.STATE_LEVEL_3_1, new game.Level3.MiniGame1());
         me.state.set(game.states.STATE_LEVEL_4_1, new game.Level4.MiniGame1());
@@ -143,6 +147,37 @@ game.resources = [
         name: "item_l1_0",
         type: "image",
         src: "data/img/item_l1_0.png"
+    },
+
+    // Level 2 resources
+    {
+        name: "player_l2",
+        type: "image",
+        src: "data/img/player_L2.png"
+    },
+
+    {
+        name: "metatiles32x32",
+        type: "image",
+        src: "data/map/tileset/metatiles32x32.png"
+    },
+
+    {
+        name: "office_tileset",
+        type: "image",
+        src: "data/map/tileset/office_tileset.png"
+    },
+
+    {
+        name: "characters_l2",
+        type: "image",
+        src: "data/map/tileset/characters_l2.png"
+    },
+
+    {
+        name: "level_2",
+        type: "tmx",
+        src: "data/map/map_level_2.tmx"
     },
 
     // Level 3 resources

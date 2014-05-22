@@ -51,7 +51,7 @@
     font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
     z-index:20;
     color:#F5F5F5;
-    font-size:48px;
+    font-size:36px;
     text-align:center;
     top:50px;
     left:0;
@@ -69,9 +69,9 @@
 .green .bg.left{ background:url(../images/bg_green.png) no-repeat left top; }
 .blue .bg.left{	background:url(../images/bg_blue.png) no-repeat left top; }
 
-.red .bg.left{ background:url(../images/bg_orange.png) no-repeat left top; }
+.red .bg.left{ background:url(../images/bg_red.png) no-repeat left top; }
 
-.yellow .bg.left{	background:url(../images/bg_blue.png) no-repeat left top; }
+.yellow .bg.left{	background:url(../images/bg_yellow.png) no-repeat left top; }
 
 
 /* The right part of the background: */
@@ -81,9 +81,9 @@
 .green .bg.right{ background:url(../images/bg_green.png) no-repeat right top; }
 .blue .bg.right{ background:url(../images/bg_blue.png) no-repeat right top; }
 
-.red .bg.right{ background:url(../images/bg_orange.png) no-repeat left top; }
+.red .bg.right{ background:url(../images/bg_red.png) no-repeat right top; }
 
-.yellow .bg.right{	background:url(../images/bg_blue.png) no-repeat left top; }
+.yellow .bg.right{	background:url(../images/bg_yellow.png) no-repeat right top; }
 
 .clock .front.left{
     left:0;

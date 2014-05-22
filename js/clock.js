@@ -46,11 +46,23 @@ function animation(clock, current, total){
   var element;
   if(current==0)
   {
+      console.log("hi");
       // Hiding the right half of the background:
-      clock.rotateRight.hide();
+      //clock.rotateRight.hide();
+      clock.rotateRight.show();
+      clock.rotateLeft.show();
 
       // Resetting the rotation of the left part:
-      rotateElement(clock.rotateLeft,0);
+      //rotateElement(clock.rotateLeft,0);
+      rotateElement(clock.rotateLeft,180);
+      rotateElement(clock.rotateRight,180);
+      clock.display.html("Sucesso");
+     return;
+  }
+
+  if(current < 7){
+    clock.rotateRight.hide();
+
   }
 
   if(angle<=180)

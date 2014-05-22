@@ -7,7 +7,7 @@
    [0, 1, 0, 2, 3]]
 
   function evaluateAlignment(){
-    if( clocks == [0,0,0,0,0])
+    if(clocks[0] == 0 &&  clocks[1] == 0 && clocks[2] == 0 &&clocks[3] == 0 &&clocks[4] == 0 )
       return true;
     return false;
   }
@@ -37,6 +37,7 @@ function updateValues(direction, clock_id){
 function controlClick(direction, clock_id){
   updateValues(direction, clock_id);
   updateView(clocks);
+  return evaluateAlignment();
 }
 
 
@@ -47,6 +48,7 @@ function scramble(){
     random_id = Math.floor(Math.random()*5);
 
     random_direction = Math.floor(Math.random()*10 + 1)%2;
+    console.log(random_id + " " + random_direction);
     updateValues(random_direction, random_id);
 
   }
@@ -87,7 +89,7 @@ game.Level5 = {
 
     play: function(){
       scramble();
-      $("#level5").append("<p> Alinhe os seus processos aos objetivos da empresa, mas lembre-se: alterar um processo pode afetar outros processos.<p>");
+      $("#level5").append("<p>Nos níveis mais altos do CMMI, um dos aspectos mais importantes é que os processos e objetivos estejam alinhados. Cada circulo abaixo representa um processo de uma empresa. O objetivo do mini-game é fazer todos os circulos se completarem. Para fazer isto, é necessário alguns ajustes em todos os processos, mas lembre-se: alterar um processo pode afetar outros processos.<p>");
       $("#level5").append("<div id='clock_one'></div>");
       $("#level5").append("<div id='clock_two'></div>");
       $("#level5").append("<div id='clock_three'></div>");
@@ -99,16 +101,21 @@ game.Level5 = {
           + "<div id='control_four' class='controls controls_size'></div>"
           + "<div id='control_five' class='controls controls_size'></div>")
 
-     $("#control_one").append("<p>Primeiro Controle</p><input type='button' id='control1l' value='Left' onClick='controlClick(0,0)'></input><input type='button' id='control1r' value='Right' onClick='controlClick(1,0)'></input>");
-     $("#control_two").append("<p>Segundo Controle</p><input type='button' id='control2l' value='Left' onClick='controlClick(0,1)'></input><input type='button' id='control2r' value='Right' onClick='controlClick(1,1)'></input><br>");
-     $("#control_three").append("<p>Terceiro Controle</p><input type='button' id='control3l' value='Left' onClick='controlClick(0,2)'></input><input type='button' id='control3r' value='Right' onClick='controlClick(1,2)'></input><br>");
-      $("#control_four").append("<p>Quarto Controle</p><input type='button' id='control4l' value='Left' onClick='controlClick(0,3)'></input><input type='button' id='control4r' value='Right' onClick='controlClick(1,3)'></input><br>");
-      $("#control_five").append("<p>Quinto Controle</p><input type='button' id='control5l' value='Left' onClick='controlClick(0,4)'></input><input type='button' id='control5r' value='Right' onClick='controlClick(1,4)'></input><br>");
-      $("#level5_control").click(function(){
+     $("#control_one").append("<p>Primeiro Controle</p><input type='button' class='btn' id='control1l' value='Left' onClick='controlClick(0,0)'></input><input type='button' class='btn' id='control1r' value='Right' onClick='controlClick(1,0)'></input>");
+     $("#control_two").append("<p>Segundo Controle</p><input type='button' class='btn'  id='control2l' value='Left' onClick='controlClick(0,1)'></input><input type='button' class='btn' id='control2r' value='Right' onClick='controlClick(1,1)'></input><br>");
+     $("#control_three").append("<p>Terceiro Controle</p><input type='button' class='btn' id='control3l' value='Left' onClick='controlClick(0,2)'></input><input type='button' class='btn' id='control3r' value='Right' onClick='controlClick(1,2)'></input><br>");
+      $("#control_four").append("<p>Quarto Controle</p><input type='button' class='btn'  id='control4l' value='Left' onClick='controlClick(0,3)'></input><input type='button' class='btn' id='control4r' value='Right' onClick='controlClick(1,3)'></input><br>");
+      $("#control_five").append("<p>Quinto Controle</p><input type='button' class='btn' id='control5l' value='Left' onClick='controlClick(0,4)'></input><input type='button' class='btn'  id='control5r' value='Right' onClick='controlClick(1,4)'></input><br>");
+      $(".btn").click(function(){
         if(evaluateAlignment()){
-          me.state.change(me.state.MENU);
+          $("#level5_controls").html("<p> Parabéns, você conseguiu cumprir este desáfio, agora só falta um, vamos para ele?</p>");
+          setTimeout(function(){
+            me.state.change(me.state.MENU)
+
+          }, 10000)
         }
-      })
+
+      });
 
       setUp(0, "#clock_one", clocks[0]);
       setUp(1, "#clock_two", clocks[1]);

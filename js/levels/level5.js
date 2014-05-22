@@ -48,7 +48,7 @@ function scramble(){
     random_id = Math.floor(Math.random()*5);
 
     random_direction = Math.floor(Math.random()*10 + 1)%2;
-    console.log(random_id + " " + random_direction);
+    //console.log(random_id + " " + random_direction);
     updateValues(random_direction, random_id);
 
   }
@@ -67,6 +67,11 @@ function ShowMelonJS() {
 
 function Clear(divId) {
     $("#" + divId).html("");
+}
+function destroyLevel(){
+  Clear("level5");
+  Clear("level5_controls");
+  ShowMelonJS();
 }
 
 game.Level5 = {
@@ -108,13 +113,9 @@ game.Level5 = {
       $("#control_five").append("<p>Quinto Controle</p><input type='button' class='btn' id='control5l' value='Left' onClick='controlClick(0,4)'></input><input type='button' class='btn'  id='control5r' value='Right' onClick='controlClick(1,4)'></input><br>");
       $(".btn").click(function(){
         if(evaluateAlignment()){
-          $("#level5_controls").html("<p> Parabéns, você conseguiu cumprir este desáfio, agora só falta um, vamos para ele?</p>");
-          setTimeout(function(){
-            me.state.change(me.state.MENU)
-
-          }, 10000)
+          $("#level5_controls").html("<p> Parabéns, você conseguiu cumprir este desáfio, agora só falta um, vamos para ele?</p><input type='button' id='finishmm51' value='Próximo desafio' onClick='destroyLevel()'></input>");
+          me.state.change(me.state.MENU);
         }
-
       });
 
       setUp(0, "#clock_one", clocks[0]);

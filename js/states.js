@@ -18,5 +18,6 @@ function addGameState(name) {
 
 addGameState("STATE_LEVEL_3_0_INIT");
 addGameState("STATE_LEVEL_3_1");
+addGameState("STATE_LEVEL_3_2");
 addGameState("STATE_LEVEL_4_1");
 addGameState("STATE_LEVEL_4_1_PLAY");

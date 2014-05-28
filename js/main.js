@@ -1,10 +1,13 @@
 var game = {
 
     // Global data, shared between levels
-    data : { },
+    data : {
+        "level31": false,
+        "level32": false
+     },
 
     onload: function() {
-        if (!me.video.init("screen", 800, 600, true, 'auto')) {
+        if (!me.video.init("screen", 800, 600, true)) {
             alert("Your browser isn't supported - try updating it to its latest version.");
             return;
         }
@@ -28,9 +31,17 @@ var game = {
         // level 3 entities
         me.entityPool.add("hero", game.HeroEntity);
         me.entityPool.add("girl", game.GirlEntity);
+        me.entityPool.add("girl1", game.Girl1Entity);
+        me.entityPool.add("girl2", game.Girl2Entity);
+        me.entityPool.add("prog1", game.Prog1Entity);
+        me.entityPool.add("prog2", game.Prog2Entity);
+        me.entityPool.add("prog3", game.Prog3Entity);
+        me.entityPool.add("boss", game.BossEntity);
+        me.entityPool.add("boss2", game.BossFinalEntity);
 
         me.state.set(game.states.STATE_LEVEL_3_0_INIT, new game.Level3.MiniGame0());
         me.state.set(game.states.STATE_LEVEL_3_1, new game.Level3.MiniGame1());
+        me.state.set(game.states.STATE_LEVEL_3_2, new game.Level3.MiniGame2());
         me.state.set(game.states.STATE_LEVEL_4_1, new game.Level4.MiniGame1());
 
         me.state.change(me.state.READY);
@@ -86,6 +97,24 @@ game.TitleScreen = me.ScreenObject.extend({
 
     onDestroyEvent: function() {
     },
+
+    /**
+     * Sets the position of the hero, depending on from what level the hero arrives.
+     */
+    mapSetting:function(){
+        var heroList = me.game.world.getEntityByProp("name", "hero");
+        var doorInList = me.game.world.getEntityByProp("name", "doorIn");
+                                                                            
+        for(var i = 0; i < doorInList.length; i++){
+            if( game.data.lastLevelName == doorInList[i].from ){
+                heroList[0].pos.x = doorInList[i].pos.x;
+                heroList[0].pos.y = doorInList[i].pos.y;    
+                break;
+            }           
+        }   
+        
+        game.data.lastLevelName = me.levelDirector.getCurrentLevelId();             
+    },
 });
 
 game.resources = [
@@ -112,23 +141,71 @@ game.resources = [
         type:"image", 
         src: "data/img/girl.png"
     },
-    
+
+    {
+        name: "girl1", 
+        type:"image", 
+        src: "data/img/girl1.png"
+    },
+
+    {
+        name: "girl2", 
+        type:"image", 
+        src: "data/img/girl2.png"
+    },
+
+    {
+        name: "prog1", 
+        type:"image", 
+        src: "data/img/prog1.png"
+    },
+
+    {
+        name: "prog2", 
+        type:"image", 
+        src: "data/img/prog2.png"
+    },
+
+    {
+        name: "prog3", 
+        type:"image", 
+        src: "data/img/prog3.png"
+    },
+
     {
         name: "boy",
         type:"image",
         src: "data/img/boy.png"
     },
+
+    {
+        name: "boss",
+        type:"image",
+        src: "data/img/boss.png"
+    },
+
+    {
+        name: "boss2",
+        type:"image",
+        src: "data/img/boss2.png"
+    },
     
     {
-        name: "TileA2",
+        name: "office_tileset",
         type:"image",
-        src: "data/map/tileset/TileA2.png"
+        src: "data/map/tileset/office_tileset.png"
+    },
+
+    {
+        name: "metatiles32x32", 
+        type:"image", 
+        src: "data/map/tileset/metatiles32x32.png"
     },
     
     /* Maps */
     {
-        name: "town",
+        name: "map_level_3",
         type: "tmx",
-        src: "data/map/town.tmx"
+        src: "data/map/map_level_3.tmx"
     },
 ];

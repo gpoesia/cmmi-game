@@ -125,3 +125,95 @@ p { line-height: 1.5em; }
 }
 .dd3-handle:before { content: '≡'; display: block; position: absolute; left: 0; top: 3px; width: 100%; text-align: center; text-indent: 0; color: #fff; font-size: 20px; font-weight: normal; }
 .dd3-handle:hover { background: #ddd; }
+
+
+/*level 3.2*/
+
+.draggable { width: 90px; height: 80px; padding: 5px; float: left; margin: 0 10px 10px 0; font-size: .9em; }
+.snappable { position: relative; width: 1200px; height:300px; border:2px solid #ccc; text-align: center}
+
+.containment-wrapper { position: relative; width: 1200px; height:400px; border:2px solid #ccc; text-align: center; z-index: 0;}
+.clientes { top: 0px; left: 0%; position: absolute; width: 40%; height:60%; border:2px solid #ccc; z-index: 1;}
+.funcionarios { top: 0px; left: 40%; position: absolute; width: 40%; height:60%; border:2px solid #ccc; z-index: 1;}
+.front_end { top: 0px; left: 80%; position: absolute; width: 20%; height:100%; border:2px solid #ccc; z-index: 1;}
+.financeiro { top: 60%; left: 0%; position: absolute; width: 80%; height:40%; border:2px solid #ccc; z-index: 1;}
+.my_image { z-index: 10;}
+
+.ui-widget-header p,  .ui-widget-content p { margin: 0; }
+
+/*dialog*/
+
+#screen{
+    position:relative;
+    width:800px;
+}
+
+#screen canvas {
+    margin: auto;
+
+    /* Hide the gap for font descenders. */
+    display: block;
+    
+    /* disable scaling interpolation */
+    image-rendering: optimizeSpeed;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -o-crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: optimize-contrast;
+    -ms-interpolation-mode: nearest-neighbor;
+}
+
+#game-dialog{
+    position:absolute;
+    left:0;
+    bottom:0;   
+    width:100%; 
+}
+
+#game-dialog .dialog{
+    background:white;
+    min-height:50px;
+    border-top:1px solid #333;  
+}
+
+#game-dialog .dialog:before {   
+   content:"";
+   /*background:transparent url(../data/img/faces.png) no-repeat 0 0;*/
+   width: 50px;
+   height: 50px;
+   display:block;
+   float:left;
+   margin-right:0.5em;
+}
+
+#game-dialog .dialog p{
+    margin:0;
+    padding:1em;
+    color:#333;     
+    cursor:pointer;     
+}
+
+#game-dialog .choice p{
+    margin-left:60px;
+    padding:0;      
+}
+
+#game-dialog .choice p:first-child{
+    padding-top:0.5em;      
+}
+
+#game-dialog .choice p:last-child{
+    padding-bottom:0.5em;       
+}
+
+#game-dialog .hero:before {
+    background-position:0 0;
+}
+
+#game-dialog .girl:before {
+    background-position:0 -50px;    
+}
+
+#game-dialog .choice:before {
+    background-position:0 -100px;   
+}

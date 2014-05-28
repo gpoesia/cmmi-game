@@ -1,4 +1,5 @@
 game.BaseEntity = me.ObjectEntity.extend({
+
 		
 	/**
      * Set direction 
@@ -60,16 +61,16 @@ game.BaseEntity = me.ObjectEntity.extend({
     	}
     		    	
     	// create sound icon    	    
-    	var icon = document.createElement( "i" );
-    	icon.setAttribute( "class", "glyphicon glyphicon-volume-up");
-    	icon.addEventListener( me.device.touch ? "touchstart" : "mousedown", function( e ) {
-    		e.preventDefault();
-    		e.stopPropagation();
-			console.log("play sound: " + event.sentence.dialogueText);				
-		}.bind( this ), false );
+  //   	var icon = document.createElement( "i" );
+  //   	icon.setAttribute( "class", "glyphicon glyphicon-volume-up");
+  //   	icon.addEventListener( me.device.touch ? "touchstart" : "mousedown", function( e ) {
+  //   		e.preventDefault();
+  //   		e.stopPropagation();
+		// 	console.log("play sound: " + event.sentence.dialogueText);				
+		// }.bind( this ), false );
     	
     	var paragraph = event.DOM.querySelector("p");    	    	        	
-    	paragraph.appendChild( icon );    	    	   	    	  
+    	// paragraph.appendChild( icon );    	    	   	    	  
     },    
 });
 
@@ -78,8 +79,8 @@ game.HeroEntity = game.BaseEntity.extend({
     init: function(x, y, settings) {
     	
     	settings.image = "boy";
-    	settings.spritewidth = 24;
-    	settings.spriteheight = 36;
+    	settings.spritewidth = 32;
+    	settings.spriteheight = 32;
     	    	    	      
         // call the constructor
         this.parent(x, y, settings);
@@ -119,8 +120,14 @@ game.HeroEntity = game.BaseEntity.extend({
     		this.pos.x -= res.x;
     		this.pos.y -= res.y;    
     		
-            if ( !res.obj.level31.isFinished() ){
-                res.obj.level31.onResetEvent();	 		    		 		    		    		    		   		    		      		    		    		    			    		    				    	
+            if ( res.obj.level32 && !res.obj.level32.isFinished() ){
+                res.obj.level32.onResetEvent();	 		    		 		    		    		    		   		    		      		    		    		    			    		    				    	
+            }
+            else if ( res.obj.level31 && !res.obj.level31.isFinished() ){
+                res.obj.level31.onResetEvent();                                                                                                                                                                                 
+            }
+            else {
+                this.doTalk( res.obj );
             }
     	}
     	    	    	    	        	    	                   	         
@@ -135,6 +142,16 @@ game.HeroEntity = game.BaseEntity.extend({
         // any update (e.g. position, animation)
         return false;
     }, 
+
+    /**
+     * Start conversation
+     * @param {Object} entity
+     */
+    doTalk:function( entity ){
+        entity.isTalking = true;
+        this.talkWith = entity;     
+        entity.dialog.show();
+    },
                   
     /**
 	 * Mouse down handler
@@ -189,7 +206,9 @@ game.GirlEntity = game.BaseEntity.extend({
         this.maxX = x + settings.width - settings.spritewidth;
         this.maxY = y + settings.height - settings.spriteheight;
                                                                                                                                                        			
-        this.level31 = new game.Level3.MiniGame1();		  							    	        	       
+        // this.level31 = new game.Level3.MiniGame1();		  	
+        // create dialog
+        this.dialog = new game.Dialog( DIALOGUES[ this.name ], this.onDialogReset.bind(this), this.onDialogShow.bind(this));						    	        	       
 	},
 	
     update: function() {    	        
@@ -230,5 +249,540 @@ game.GirlEntity = game.BaseEntity.extend({
 	 */
     onDestroyEvent : function() {		
 		clearInterval( this.walkInterval );	
+    }, 
+});
+
+game.Girl1Entity = game.BaseEntity.extend({
+    
+    init: function(x, y, settings) {
+        
+        settings.image = "girl1";
+        settings.spritewidth = 32;
+        settings.spriteheight = 32;
+                              
+        // call the constructor
+        this.parent(x, y, settings);
+                
+        // set the default horizontal & vertical speed (accel vector)
+        this.setVelocity( 2, 2);
+              
+        this.gravity = 0;
+        this.setFriction(0.5, 0.5);
+                       
+        this.collidable = true;        
+        this.type = me.game.ENEMY_OBJECT;
+                            
+        this.renderable.addAnimation("down", [0,1,2]);
+        this.renderable.addAnimation("left", [3,4,5]);
+        this.renderable.addAnimation("right", [6,7,8]);
+        this.renderable.addAnimation("up", [9,10,11]);
+                
+        this.minX = x;
+        this.minY = y;
+        this.maxX = x + settings.width - settings.spritewidth;
+        this.maxY = y + settings.height - settings.spriteheight;
+                                                                                                                                                                
+        // this.level31 = new game.Level3.MiniGame1();          
+        // create dialog
+        this.dialog = new game.Dialog( DIALOGUES[ this.name ], this.onDialogReset.bind(this), this.onDialogShow.bind(this));                                                   
+    },
+    
+    update: function() {                
+        if (!this.inViewport){
+            return false;
+        }
+            
+        this._calculateStep();
+                   
+        this.updateMovement();
+                                        
+        // update animation if necessary
+        if (this.vel.x!=0 || this.vel.y!=0) {
+            // update object animation
+            this.parent();
+            return true;
+        }
+        
+        return false;
+    },
+                       
+    /**
+    * set a target position
+    * @private
+    * @param {number} x - pos x
+    * @param {number} y - pos y
+    */
+    _setTargetPosition:function(x, y){
+        this._target = {};                                
+        this._target.x = x;     
+        this._target.y = y;    
+        this._setDirection(this._target.x - this.pos.x, this._target.y - this.pos.y);      
+        this.renderable.setCurrentAnimation( this.direction );    
+    },  
+    
+    /**
+     * on destroy handler
+     */
+    onDestroyEvent : function() {       
+        clearInterval( this.walkInterval ); 
+    }, 
+});
+
+game.Girl2Entity = game.BaseEntity.extend({
+    
+    init: function(x, y, settings) {
+        
+        settings.image = "girl2";
+        settings.spritewidth = 32;
+        settings.spriteheight = 32;
+                              
+        // call the constructor
+        this.parent(x, y, settings);
+                
+        // set the default horizontal & vertical speed (accel vector)
+        this.setVelocity( 2, 2);
+              
+        this.gravity = 0;
+        this.setFriction(0.5, 0.5);
+                       
+        this.collidable = true;        
+        this.type = me.game.ENEMY_OBJECT;
+                            
+        this.renderable.addAnimation("down", [0,1,2]);
+        this.renderable.addAnimation("left", [3,4,5]);
+        this.renderable.addAnimation("right", [6,7,8]);
+        this.renderable.addAnimation("up", [9,10,11]);
+                
+        this.minX = x;
+        this.minY = y;
+        this.maxX = x + settings.width - settings.spritewidth;
+        this.maxY = y + settings.height - settings.spriteheight;
+                                                                                                                                                                
+        // this.level31 = new game.Level3.MiniGame1();          
+        // create dialog
+        this.dialog = new game.Dialog( DIALOGUES[ this.name ], this.onDialogReset.bind(this), this.onDialogShow.bind(this));                                                   
+    },
+    
+    update: function() {                
+        if (!this.inViewport){
+            return false;
+        }
+            
+        this._calculateStep();
+                   
+        this.updateMovement();
+                                        
+        // update animation if necessary
+        if (this.vel.x!=0 || this.vel.y!=0) {
+            // update object animation
+            this.parent();
+            return true;
+        }
+        
+        return false;
+    },
+                       
+    /**
+    * set a target position
+    * @private
+    * @param {number} x - pos x
+    * @param {number} y - pos y
+    */
+    _setTargetPosition:function(x, y){
+        this._target = {};                                
+        this._target.x = x;     
+        this._target.y = y;    
+        this._setDirection(this._target.x - this.pos.x, this._target.y - this.pos.y);      
+        this.renderable.setCurrentAnimation( this.direction );    
+    },  
+    
+    /**
+     * on destroy handler
+     */
+    onDestroyEvent : function() {       
+        clearInterval( this.walkInterval ); 
+    }, 
+});
+
+
+game.Prog1Entity = game.BaseEntity.extend({
+    
+    init: function(x, y, settings) {
+        
+        settings.image = "prog1";
+        settings.spritewidth = 32;
+        settings.spriteheight = 32;
+                              
+        // call the constructor
+        this.parent(x, y, settings);
+                
+        // set the default horizontal & vertical speed (accel vector)
+        this.setVelocity( 2, 2);
+              
+        this.gravity = 0;
+        this.setFriction(0.5, 0.5);
+                       
+        this.collidable = true;        
+        this.type = me.game.ENEMY_OBJECT;
+                            
+        this.renderable.addAnimation("down", [0,1,2]);
+        this.renderable.addAnimation("left", [3,4,5]);
+        this.renderable.addAnimation("right", [6,7,8]);
+        this.renderable.addAnimation("up", [9,10,11]);
+                
+        this.minX = x;
+        this.minY = y;
+        this.maxX = x + settings.width - settings.spritewidth;
+        this.maxY = y + settings.height - settings.spriteheight;
+                                                                                                                                                                
+        // this.level31 = new game.Level3.MiniGame1();          
+        // create dialog
+        this.dialog = new game.Dialog( DIALOGUES[ this.name ], this.onDialogReset.bind(this), this.onDialogShow.bind(this));                                                   
+    },
+    
+    update: function() {                
+        if (!this.inViewport){
+            return false;
+        }
+            
+        this._calculateStep();
+                   
+        this.updateMovement();
+                                        
+        // update animation if necessary
+        if (this.vel.x!=0 || this.vel.y!=0) {
+            // update object animation
+            this.parent();
+            return true;
+        }
+        
+        return false;
+    },
+                       
+    /**
+    * set a target position
+    * @private
+    * @param {number} x - pos x
+    * @param {number} y - pos y
+    */
+    _setTargetPosition:function(x, y){
+        this._target = {};                                
+        this._target.x = x;     
+        this._target.y = y;    
+        this._setDirection(this._target.x - this.pos.x, this._target.y - this.pos.y);      
+        this.renderable.setCurrentAnimation( this.direction );    
+    },  
+    
+    /**
+     * on destroy handler
+     */
+    onDestroyEvent : function() {       
+        clearInterval( this.walkInterval ); 
+    }, 
+});
+
+game.Prog2Entity = game.BaseEntity.extend({
+    
+    init: function(x, y, settings) {
+        
+        settings.image = "prog2";
+        settings.spritewidth = 32;
+        settings.spriteheight = 32;
+                              
+        // call the constructor
+        this.parent(x, y, settings);
+                
+        // set the default horizontal & vertical speed (accel vector)
+        this.setVelocity( 2, 2);
+              
+        this.gravity = 0;
+        this.setFriction(0.5, 0.5);
+                       
+        this.collidable = true;        
+        this.type = me.game.ENEMY_OBJECT;
+                            
+        this.renderable.addAnimation("down", [0,1,2]);
+        this.renderable.addAnimation("left", [3,4,5]);
+        this.renderable.addAnimation("right", [6,7,8]);
+        this.renderable.addAnimation("up", [9,10,11]);
+                
+        this.minX = x;
+        this.minY = y;
+        this.maxX = x + settings.width - settings.spritewidth;
+        this.maxY = y + settings.height - settings.spriteheight;
+                                                                                                                                                                
+        // this.level31 = new game.Level3.MiniGame1();          
+        // create dialog
+        this.dialog = new game.Dialog( DIALOGUES[ this.name ], this.onDialogReset.bind(this), this.onDialogShow.bind(this));                                                   
+    },
+    
+    update: function() {                
+        if (!this.inViewport){
+            return false;
+        }
+            
+        this._calculateStep();
+                   
+        this.updateMovement();
+                                        
+        // update animation if necessary
+        if (this.vel.x!=0 || this.vel.y!=0) {
+            // update object animation
+            this.parent();
+            return true;
+        }
+        
+        return false;
+    },
+                       
+    /**
+    * set a target position
+    * @private
+    * @param {number} x - pos x
+    * @param {number} y - pos y
+    */
+    _setTargetPosition:function(x, y){
+        this._target = {};                                
+        this._target.x = x;     
+        this._target.y = y;    
+        this._setDirection(this._target.x - this.pos.x, this._target.y - this.pos.y);      
+        this.renderable.setCurrentAnimation( this.direction );    
+    },  
+    
+    /**
+     * on destroy handler
+     */
+    onDestroyEvent : function() {       
+        clearInterval( this.walkInterval ); 
+    }, 
+});
+
+game.Prog3Entity = game.BaseEntity.extend({
+    
+    init: function(x, y, settings) {
+        
+        settings.image = "prog3";
+        settings.spritewidth = 32;
+        settings.spriteheight = 32;
+                              
+        // call the constructor
+        this.parent(x, y, settings);
+                
+        // set the default horizontal & vertical speed (accel vector)
+        this.setVelocity( 2, 2);
+              
+        this.gravity = 0;
+        this.setFriction(0.5, 0.5);
+                       
+        this.collidable = true;        
+        this.type = me.game.ENEMY_OBJECT;
+                            
+        this.renderable.addAnimation("down", [0,1,2]);
+        this.renderable.addAnimation("left", [3,4,5]);
+        this.renderable.addAnimation("right", [6,7,8]);
+        this.renderable.addAnimation("up", [9,10,11]);
+                
+        this.minX = x;
+        this.minY = y;
+        this.maxX = x + settings.width - settings.spritewidth;
+        this.maxY = y + settings.height - settings.spriteheight;
+                                                                                                                                                                
+        // this.level31 = new game.Level3.MiniGame1();          
+        // create dialog
+        this.dialog = new game.Dialog( DIALOGUES[ this.name ], this.onDialogReset.bind(this), this.onDialogShow.bind(this));                                                   
+    },
+    
+    update: function() {                
+        if (!this.inViewport){
+            return false;
+        }
+            
+        this._calculateStep();
+                   
+        this.updateMovement();
+                                        
+        // update animation if necessary
+        if (this.vel.x!=0 || this.vel.y!=0) {
+            // update object animation
+            this.parent();
+            return true;
+        }
+        
+        return false;
+    },
+                       
+    /**
+    * set a target position
+    * @private
+    * @param {number} x - pos x
+    * @param {number} y - pos y
+    */
+    _setTargetPosition:function(x, y){
+        this._target = {};                                
+        this._target.x = x;     
+        this._target.y = y;    
+        this._setDirection(this._target.x - this.pos.x, this._target.y - this.pos.y);      
+        this.renderable.setCurrentAnimation( this.direction );    
+    },  
+    
+    /**
+     * on destroy handler
+     */
+    onDestroyEvent : function() {       
+        clearInterval( this.walkInterval ); 
+    }, 
+});
+
+game.BossEntity = game.BaseEntity.extend({
+    
+    init: function(x, y, settings) {
+
+        settings.image = "boss";
+        settings.spritewidth = 32;
+        settings.spriteheight = 32;
+                              
+        // call the constructor
+        this.parent(x, y, settings);
+                
+        // set the default horizontal & vertical speed (accel vector)
+        this.setVelocity( 2, 2);
+              
+        this.gravity = 0;
+        this.setFriction(0.5, 0.5);
+                       
+        this.collidable = true;        
+        this.type = me.game.ENEMY_OBJECT;
+                            
+        this.renderable.addAnimation("down", [0,1,2]);
+        this.renderable.addAnimation("left", [3,4,5]);
+        this.renderable.addAnimation("right", [6,7,8]);
+        this.renderable.addAnimation("up", [9,10,11]);
+                
+        this.minX = x;
+        this.minY = y;
+        this.maxX = x + settings.width - settings.spritewidth;
+        this.maxY = y + settings.height - settings.spriteheight;
+
+        if (game.data.level31) {
+            this.level32 = new game.Level3.MiniGame2();
+        }
+        else {
+            this.dialog = new game.Dialog( DIALOGUES[ this.name ], this.onDialogReset.bind(this), this.onDialogShow.bind(this));
+        }
+                                                                                                                                                                                                                   
+    },
+    
+    update: function() {                
+        if (!this.inViewport){
+            return false;
+        }
+            
+        this._calculateStep();
+                   
+        this.updateMovement();
+                                        
+        // update animation if necessary
+        if (this.vel.x!=0 || this.vel.y!=0) {
+            // update object animation
+            this.parent();
+            return true;
+        }
+        
+        return false;
+    },
+                       
+    /**
+    * set a target position
+    * @private
+    * @param {number} x - pos x
+    * @param {number} y - pos y
+    */
+    _setTargetPosition:function(x, y){
+        this._target = {};                                
+        this._target.x = x;     
+        this._target.y = y;    
+        this._setDirection(this._target.x - this.pos.x, this._target.y - this.pos.y);      
+        this.renderable.setCurrentAnimation( this.direction );    
+    },  
+    
+    /**
+     * on destroy handler
+     */
+    onDestroyEvent : function() {       
+        clearInterval( this.walkInterval ); 
+    }, 
+});
+
+game.BossFinalEntity = game.BaseEntity.extend({
+    
+    init: function(x, y, settings) {
+        
+        settings.image = "boss2";
+        settings.spritewidth = 32;
+        settings.spriteheight = 32;
+                              
+        // call the constructor
+        this.parent(x, y, settings);
+                
+        // set the default horizontal & vertical speed (accel vector)
+        this.setVelocity( 2, 2);
+              
+        this.gravity = 0;
+        this.setFriction(0.5, 0.5);
+                       
+        this.collidable = true;        
+        this.type = me.game.ENEMY_OBJECT;
+                            
+        this.renderable.addAnimation("down", [0,1,2]);
+        this.renderable.addAnimation("left", [3,4,5]);
+        this.renderable.addAnimation("right", [6,7,8]);
+        this.renderable.addAnimation("up", [9,10,11]);
+                
+        this.minX = x;
+        this.minY = y;
+        this.maxX = x + settings.width - settings.spritewidth;
+        this.maxY = y + settings.height - settings.spriteheight;
+                                                                                                                                                                
+        this.level31 = new game.Level3.MiniGame1();         
+    },
+    
+    update: function() {                
+        if (!this.inViewport){
+            return false;
+        }
+            
+        this._calculateStep();
+                   
+        this.updateMovement();
+                                        
+        // update animation if necessary
+        if (this.vel.x!=0 || this.vel.y!=0) {
+            // update object animation
+            this.parent();
+            return true;
+        }
+        
+        return false;
+    },
+                       
+    /**
+    * set a target position
+    * @private
+    * @param {number} x - pos x
+    * @param {number} y - pos y
+    */
+    _setTargetPosition:function(x, y){
+        this._target = {};                                
+        this._target.x = x;     
+        this._target.y = y;    
+        this._setDirection(this._target.x - this.pos.x, this._target.y - this.pos.y);      
+        this.renderable.setCurrentAnimation( this.direction );    
+    },  
+    
+    /**
+     * on destroy handler
+     */
+    onDestroyEvent : function() {       
+        clearInterval( this.walkInterval ); 
     }, 
 });

@@ -104,14 +104,14 @@ game.Level3 = {
                 "</div>"+
               "</div>"+
               "<input type='button' id='tryButton' value='Enviar ao Rodolfo'/>");
-            
+
             $('#nestable2 > .dd-list').randomize('li');
 
             // activate Nestable for list 1
             $('#nestable').nestable({
                 group: 1
             });
-            
+
             // activate Nestable for list 2
             $('#nestable2').nestable({
                 group: 1
@@ -120,10 +120,10 @@ game.Level3 = {
             self = this;
             $("#tryButton").click(function() {
                 if (self.evaluateQuantitativeGoals()) {
-                    
+
                     // return to map
                     self.onDestroyEvent();
-                    
+
                     // return to menu
                     me.state.set(me.state.MENU, new game.MainMenu());
                     me.state.change(me.state.MENU);
@@ -139,13 +139,13 @@ game.Level3 = {
             var badRequirimentListSize = 2;
             var bFirstID = rFirstID + requirementListSize;
             var correct = false;
-            
+
             if (requirementsList.length == 0) {
                 correct = true;
 
                 if (classifiedList[0].children && classifiedList[0].children.length == requirementListSize) {
                   for (var i = classifiedList[0].children.length - 1; i >= 0; i--) {
-                    if (classifiedList[0].children[i].id < rFirstID || 
+                    if (classifiedList[0].children[i].id < rFirstID ||
                       classifiedList[0].children[i].id >= (rFirstID + requirementListSize)){
                         console.log(classifiedList[0].children[i].id);
                         correct = false;
@@ -158,7 +158,7 @@ game.Level3 = {
 
                 if (classifiedList[1].children && classifiedList[1].children.length == badRequirimentListSize) {
                   for (var i = classifiedList[1].children.length - 1; i >= 0; i--) {
-                    if (classifiedList[1].children[i].id < bFirstID || 
+                    if (classifiedList[1].children[i].id < bFirstID ||
                       classifiedList[1].children[i].id >= (bFirstID + badRequirimentListSize)){
                         console.log(classifiedList[1].children[i].id);
                         correct = false;
@@ -180,7 +180,7 @@ game.Level3 = {
             return false;
         },
 
-        
+
 
     }),
 };

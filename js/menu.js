@@ -22,7 +22,7 @@ LevelButton = me.GUI_Object.extend({
     draw: function(context) {
         this.parent(context);
         this.font.draw(context, this.text, this.x + 90, this.y + 10);
-    }, 
+    },
 
     update: function() {
         return this.parent();

@@ -14,7 +14,7 @@ function Clear(divId) {
 
 var sequentialElementId = 0;
 
-function ShowTextSlowly(elementId, text, interval) {
+function ShowTextSlowly(elementId, text, interval, timeoutId) {
     var index = 0;
 
     function addCharacter() {
@@ -22,7 +22,7 @@ function ShowTextSlowly(elementId, text, interval) {
         $("#" + elementId).text(text.substr(0, index));
 
         if (index < text.length) {
-            window.setTimeout(addCharacter, interval);
+            timeoutId.value = window.setTimeout(addCharacter, interval);
         }
     }
 
@@ -41,6 +41,7 @@ function ShowPrologue(divId, messagesList, callback) {
             "<input class='button bottom' id='skipButton' type='button' value='Pular'/>");
 
     var nextMessage = 0;
+    var timeoutId = {value: null};
 
     function Skip() {
         $("#prologueText").replaceWith("");
@@ -53,7 +54,9 @@ function ShowPrologue(divId, messagesList, callback) {
         if (nextMessage === messagesList.length) {
             Skip();
         } else {
-            ShowTextSlowly("prologueText", messagesList[nextMessage], 30);
+            window.clearTimeout(timeoutId.value);
+            ShowTextSlowly("prologueText", messagesList[nextMessage], 30, timeoutId);
+            console.log(timeoutId);
             nextMessage++;
         }
     }

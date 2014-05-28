@@ -44,9 +44,8 @@ game.MainMenu = me.ScreenObject.extend({
             new LevelButton(350, 150, "Level 3", this.font, game.states.STATE_LEVEL_3_0_INIT),
             new LevelButton(350, 200, "Level 4.1", this.font, game.states.STATE_LEVEL_4_1),
             new LevelButton(350, 250, "Level 4.2", this.font, game.states.STATE_LEVEL_4_2),
-            new LevelButton(350, 300, "Level 5.1", this.font, game.states.STATE_LEVEL_5_1),
-            new LevelButton(350, 350, "Level 5.2", this.font, game.states.STATE_LEVEL_5_2),
-        ];
+            new LevelButton(350, 300, "Level 5.1", this.font, game.states.STATE_LEVEL_5_1)
+       ];
 
         for (var i = 0; i < this.buttons.length; i++) {
             me.game.world.addChild(this.buttons[i]);

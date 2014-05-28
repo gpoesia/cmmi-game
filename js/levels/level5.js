@@ -94,7 +94,7 @@ game.Level5 = {
 
     play: function(){
       scramble();
-      $("#level5").append("<p>Nos níveis mais altos do CMMI, um dos aspectos mais importantes é que os processos e objetivos estejam alinhados. Cada circulo abaixo representa um processo de uma empresa. O objetivo do mini-game é fazer todos os circulos se completarem. Para fazer isto, é necessário alguns ajustes em todos os processos, mas lembre-se: alterar um processo pode afetar outros processos.<p>");
+      $("#level5").append("<p>Nos níveis mais altos do CMMI, um dos aspectos mais importantes é que os processos e objetivos estejam alinhados. Cada circulo abaixo representa um processo de sua empresa. O objetivo do mini-game é fazer todos os circulos se completarem. Para fazer isto, é necessário alguns ajustes em todos os processos, mas lembre-se: alterar um processo pode afetar outros processos.<p>");
       $("#level5").append("<div id='clock_one'></div>");
       $("#level5").append("<div id='clock_two'></div>");
       $("#level5").append("<div id='clock_three'></div>");
@@ -113,7 +113,7 @@ game.Level5 = {
       $("#control_five").append("<p>Quinto Controle</p><input type='button' class='btn' id='control5l' value='Left' onClick='controlClick(0,4)'></input><input type='button' class='btn'  id='control5r' value='Right' onClick='controlClick(1,4)'></input><br>");
       $(".btn").click(function(){
         if(evaluateAlignment()){
-          $("#level5_controls").html("<p> Parabéns, você conseguiu cumprir este desáfio, agora só falta um, vamos para ele?</p><input type='button' id='finishmm51' value='Próximo desafio' onClick='destroyLevel()'></input>");
+          $("#level5_controls").html("<p> Parabéns, você conseguiu cumprir todos os desafios. Agora que você conhece um pouco mais sobre o CMMI.</p><input type='button' id='finishmm51' value='Próximo desafio' onClick='destroyLevel()'></input>");
           me.state.change(me.state.MENU);
         }
       });

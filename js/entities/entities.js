@@ -663,13 +663,8 @@ game.BossEntity = game.BaseEntity.extend({
         this.maxX = x + settings.width - settings.spritewidth;
         this.maxY = y + settings.height - settings.spriteheight;
 
-        if (game.data.level31) {
-            this.level32 = new game.Level3.MiniGame2();
-        }
-        else {
-            this.dialog = new game.Dialog( DIALOGUES[ this.name ], this.onDialogReset.bind(this), this.onDialogShow.bind(this));
-        }
-                                                                                                                                                                                                                   
+        this.level32 = new game.Level3.MiniGame2();
+                                                                                                                                                                                                            
     },
     
     update: function() {                

@@ -49,6 +49,7 @@ game.Level3 = {
         },
 
         onResetEvent: function() {
+            game.data.level31 = true;
             console.log("Resetting level 3.1");
             HideMelonJS();
             $("#game").append("<div id='level31'></div>");
@@ -119,7 +120,7 @@ game.Level3 = {
 
             self = this;
             $("#tryButton").click(function() {
-                if (self.evaluateQuantitativeGoals()) {
+                if (self.evaluateQuantitativeGoals() || true) {
                     
                     // return to map
                     self.onDestroyEvent();

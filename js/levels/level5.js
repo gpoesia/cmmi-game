@@ -62,7 +62,7 @@ function HideMelonJS() {
 }
 
 function ShowMelonJS() {
-    $("#screen").css("display", "inline");
+    $("#screen").css("display", "block");
 }
 
 function Clear(divId) {

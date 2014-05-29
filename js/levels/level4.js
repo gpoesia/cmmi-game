@@ -14,7 +14,7 @@ function Clear(divId) {
 
 var sequentialElementId = 0;
 
-function ShowTextSlowly(elementId, text, interval) {
+function ShowTextSlowly(elementId, text, interval, timeoutId) {
     var index = 0;
 
     function addCharacter() {
@@ -22,7 +22,7 @@ function ShowTextSlowly(elementId, text, interval) {
         $("#" + elementId).text(text.substr(0, index));
 
         if (index < text.length) {
-            window.setTimeout(addCharacter, interval);
+            timeoutId.value = window.setTimeout(addCharacter, interval);
         }
     }
 
@@ -41,6 +41,7 @@ function ShowPrologue(divId, messagesList, callback) {
             "<input class='button bottom' id='skipButton' type='button' value='Pular'/>");
 
     var nextMessage = 0;
+    var timeoutId = {value: null};
 
     function Skip() {
         $("#prologueText").replaceWith("");
@@ -53,7 +54,9 @@ function ShowPrologue(divId, messagesList, callback) {
         if (nextMessage === messagesList.length) {
             Skip();
         } else {
-            ShowTextSlowly("prologueText", messagesList[nextMessage], 30);
+            window.clearTimeout(timeoutId.value);
+            ShowTextSlowly("prologueText", messagesList[nextMessage], 30, timeoutId);
+            console.log(timeoutId);
             nextMessage++;
         }
     }
@@ -72,6 +75,58 @@ function watchSliderValue(id, paragraphId, suffix) {
     $(id).slider("option", "value", $(id).slider("option", "min"));
 }
 
+function WatchGoalValue(valueId, goalSpanId, scoreId, buttonId,
+                        isMaximum, goal, min, max, maxScore) {
+
+    $("#" + valueId).html(goal);
+    $("#" + goalSpanId).html(goal);
+
+    function update() {
+        var value = parseInt($("#" + valueId).html());
+        var scoreValue = parseInt($("#" + scoreId).html());
+
+        if (scoreValue >= maxScore) {
+            return;
+        }
+
+        if (!isNaN(scoreValue) && ((value > goal && isMaximum) ||
+                (value < goal && !isMaximum))) {
+            $("#" + scoreId).html(scoreValue - 1);
+        }
+
+        $("#" + valueId).html(Math.round(Math.random() * (max - min) + min));
+        setTimeout(update, 5000);
+    }
+
+    function solve() {
+        var value = parseInt($("#" + valueId).html());
+
+        if (((value > goal && isMaximum) || (value < goal && !isMaximum))) {
+            $("#" + valueId).html("Resolvido!");
+            var scoreValue = parseInt($("#" + scoreId).html());
+            $("#" + scoreId).html(scoreValue + 2);
+        } else {
+             $("#" + valueId).html("Desperdício!");
+            var scoreValue = parseInt($("#" + scoreId).html());
+            $("#" + scoreId).html(scoreValue - 1);
+        }
+    }
+
+    setTimeout(update, 5000);
+    $("#" + buttonId).click(solve);
+}
+
+function WatchScore(scoreId, maxScore, callback) {
+    function watch() {
+        if (parseInt($("#" + scoreId).html()) >= maxScore) {
+            callback();
+        } else {
+            setTimeout(watch, 250);
+        }
+    }
+
+    setTimeout(watch, 250);
+}
 
 game.Level4 = {
 
@@ -94,6 +149,19 @@ game.Level4 = {
                          "Seu objetivo, então, é definir metas realistas e que possibilitem que o desenvolvimento se oriente " +
                              "para o desenvolvimento de software de qualidade, que atenda aos objetivos tanto do cliente quanto " +
                              "da sua empresa. Preparado?"],
+
+    MiniGame2Messages: ["Definir metas já foi difícil. Mas só as metas não bastam para atingir o nível 4 " +
+                            "de maturidade no desenvolvimento de software segundo o modelo de referência CMMI.",
+                        "Além das metas, é preciso acompanhar, quantitativamente, o andamento do projeto. Tendo " +
+                            "medidas não favoráveis, é preciso tomar atitudes - caso contrário, de que adianta medir?",
+                        "Completar esta tarefa com sucesso mostrará que você atingiu a Meta Específica SG 2 da área de processo " +
+                            "Quantitative Project Management (QPM) do nível 4 do CMMI. Para tal, você deve acompanhar os valores " +
+                            "sendo medidos durante o projeto e compará-los com a meta que você definiu anteriormente. Se um valor " +
+                            "mostrar que o projeto está falhando por não atingir uma meta, rapidamente clique no botão " +
+                            "correspondente à meta para tomar alguma atitude e normalizar seu valor.",
+                        "Você ganhará um ponto para cada atitude correta que tomar. Depois de um determinado tempo, " +
+                            "os indicadores são medidos novamente. Se algum estiver abaixo da meta e você não tiver tomado " +
+                            "atitude, você perderá um ponto. Preparado? Quando estiver pronto, clique em \"Próximo\"."],
 
     MiniGame1: me.ScreenObject.extend({
         init: function() {
@@ -213,6 +281,91 @@ game.Level4 = {
             return false;
         },
 
+    }),
+
+    MiniGame2: me.ScreenObject.extend({
+        init: function() {
+        },
+
+        maxScore: 15,
+
+        onResetEvent: function() {
+            HideMelonJS();
+            $("#game").append("<div id='level4'></div>");
+            var self = this;
+            ShowPrologue("level4", game.Level4.MiniGame2Messages, function() { self.play(); });
+        },
+
+        onDestroyEvent: function() {
+            ShowMelonJS();
+            $("#level4").replaceWith("");
+        },
+
+        play: function() {
+            $("#level4").append("<p>Gestão Quantitativa! Observe os valores dos indicadores de desempenho " +
+                "sendo medidos constantemente nos projetos. Quando algum indicador ficar pior que o valor " +
+                "de referência, que você definiu, clique no botão correspondente para tomar alguma atitude. ",
+                "<p>Pontos: <span id='score'>0</span>",
+                "<table>" +
+                "<thead>" +
+                "    <tr>" +
+                "        <th></th>" +
+                "        <th>Meta</th>" +
+                "        <th>Valor</th>" +
+                "        <th></th>" +
+                "    </tr>" +
+                "</thead>" +
+                "<tbody>" +
+                "    <tr>" +
+                "        <td>Número máximo de bugs por ponto de função</td>" +
+                "        <td><span id='mbp'></span></td>" +
+                "        <td><span id='bp'></span>" +
+                "        <td><input value='Tomar atitude!' type='button' id='bt_bp'/></td>" +
+                "    </tr>" +
+                "    <tr>" +
+                "        <td>Fração mínima do código coberta por testes automatizados (%)</td>" +
+                "        <td><span id='mcc'></span></td>" +
+                "        <td><span id='cc'></span></td>" +
+                "        <td><input value='Tomar atitude!' type='button' id='bt_cc'/></td>" +
+                "    </tr>" +
+                "    <tr>" +
+                "        <td>Fração mínima do código revisada por um desenvolvedor que não escreveu o código (%)</td>" +
+                "        <td><span id='mcr'></span></td>" +
+                "        <td><span id='cr'></span>" +
+                "        <td><input value='Tomar atitude!' type='button' id='bt_cr'/></td>" +
+                "    </tr>" +
+                "    <tr>" +
+                "        <td>Máximo de horas por ponto de função</td>" +
+                "        <td><span id='mhp'></span></td>" +
+                "        <td><span id='hp'></span>" +
+                "        <td><input value='Tomar atitude!' type='button' id='bt_hp'/></td>" +
+                "    </tr>" +
+                "    <tr>" +
+                "        <td>Fração máxima dos requisitos que precisaram de revisão durante o projeto (%)</td>" +
+                "        <td><span id='mrr'></span></td>" +
+                "        <td><span id='rr'></span>" +
+                "        <td><input value='Tomar atitude!' type='button' id='bt_rr'/></td>" +
+                "    </tr>" +
+                "</tbody>" +
+                "</table>");
+
+            WatchGoalValue("bp", "mbp", "score", "bt_bp", true, 4, 0, 10, this.maxScore);
+            WatchGoalValue("cc", "mcc", "score", "bt_cc", false, 60, 0, 100, this.maxScore);
+            WatchGoalValue("cr", "mcr", "score", "bt_cr", false, 60, 0, 100, this.maxScore);
+            WatchGoalValue("hp", "mhp", "score", "bt_hp", true, 10, 0, 40, this.maxScore);
+            WatchGoalValue("rr", "mrr", "score", "bt_rr", true, 25, 0, 100, this.maxScore);
+            var self = this;
+
+            WatchScore("score", this.maxScore, function() {
+                window.alert("Excelente! Você mostrou competência em " +
+                   "acompanhar e agir de acordo com metas quantitativas " +
+                   "definidas de forma coordenada com os objetivos " +
+                   "do negócio. Com isto, sua empresa passou pelo " +
+                   "processo de avaliação SCAMPI e foi certificada " +
+                   "por ter maturidade no nível 4 do CMMI. Parabéns!");
+                me.state.change(me.state.MENU);
+            });
+        },
     }),
 };
 

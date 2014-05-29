@@ -43,6 +43,8 @@ var game = {
         me.state.set(game.states.STATE_LEVEL_3_1, new game.Level3.MiniGame1());
         me.state.set(game.states.STATE_LEVEL_3_2, new game.Level3.MiniGame2());
         me.state.set(game.states.STATE_LEVEL_4_1, new game.Level4.MiniGame1());
+        me.state.set(game.states.STATE_LEVEL_4_2, new game.Level4.MiniGame2());
+        me.state.set(game.states.STATE_LEVEL_5_1, new game.Level5.MiniGame1());
 
         me.state.change(me.state.READY);
     }
@@ -67,7 +69,7 @@ game.TitleScreen = me.ScreenObject.extend({
             this.scrollerfont = new me.BitmapFont("32x32_font", 32);
 
             me.input.bindKey(me.input.KEY.ENTER, "enter", true);
-            
+
             this.handler = me.event.subscribe(me.event.KEYDOWN, function (action, keyCode, edge) {
                 if (action === "enter") {
                     me.state.change(me.state.MENU);
@@ -119,7 +121,7 @@ game.TitleScreen = me.ScreenObject.extend({
 
 game.resources = [
     {
-        name: "cmmi_levels", 
+        name: "cmmi_levels",
         type: "image",
         src: "images/cmmi_levels.png"
     },
@@ -137,11 +139,12 @@ game.resources = [
     },
 
     {
-        name: "girl", 
-        type:"image", 
+        name: "girl",
+        type:"image",
         src: "data/img/girl.png"
     },
 
+<<<<<<< HEAD
     {
         name: "girl1", 
         type:"image", 
@@ -172,12 +175,15 @@ game.resources = [
         src: "data/img/prog3.png"
     },
 
+=======
+>>>>>>> master
     {
         name: "boy",
         type:"image",
         src: "data/img/boy.png"
     },
 
+<<<<<<< HEAD
     {
         name: "boss",
         type:"image",
@@ -190,6 +196,8 @@ game.resources = [
         src: "data/img/boss2.png"
     },
     
+=======
+>>>>>>> master
     {
         name: "office_tileset",
         type:"image",
@@ -201,11 +209,23 @@ game.resources = [
         type:"image", 
         src: "data/map/tileset/metatiles32x32.png"
     },
-    
+
+    {
+        name: "clock2_resizedbg",
+        type: "image",
+        src: "data/map/tileset/clock2_resizedbg.png"
+    },
+
     /* Maps */
     {
         name: "map_level_3",
         type: "tmx",
         src: "data/map/map_level_3.tmx"
+    },
+
+    {
+      name: "clock",
+      type: "tmx",
+      src: "data/map/clock.tmx"
     },
 ];

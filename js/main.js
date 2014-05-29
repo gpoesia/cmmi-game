@@ -144,7 +144,6 @@ game.resources = [
         src: "data/img/girl.png"
     },
 
-<<<<<<< HEAD
     {
         name: "girl1", 
         type:"image", 
@@ -175,15 +174,12 @@ game.resources = [
         src: "data/img/prog3.png"
     },
 
-=======
->>>>>>> master
     {
         name: "boy",
         type:"image",
         src: "data/img/boy.png"
     },
 
-<<<<<<< HEAD
     {
         name: "boss",
         type:"image",
@@ -196,8 +192,6 @@ game.resources = [
         src: "data/img/boss2.png"
     },
     
-=======
->>>>>>> master
     {
         name: "office_tileset",
         type:"image",

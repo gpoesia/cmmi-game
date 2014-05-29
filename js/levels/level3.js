@@ -104,13 +104,8 @@ game.Level3 = {
                     "</ol>"+
                 "</div>"+
               "</div>"+
-<<<<<<< HEAD
               "<input type='button' id='tryButton' value='Entregar ao Rodolfo'/>");
             
-=======
-              "<input type='button' id='tryButton' value='Enviar ao Rodolfo'/>");
-
->>>>>>> master
             $('#nestable2 > .dd-list').randomize('li');
 
             // activate Nestable for list 1
@@ -208,7 +203,6 @@ game.Level3 = {
             $("#level32").replaceWith("");
         },
 
-<<<<<<< HEAD
         play: function() {
             $("#level32").append(
                 "<div class=\"containment-wrapper\">"+
@@ -375,9 +369,6 @@ game.Level3 = {
                     }
                 }
             );
-=======
-
->>>>>>> master
 
             $( "#funcionarios_container" ).data("draggables", [0, 0, 0, 0, 0]).droppable({
                 accept: '.my_image',

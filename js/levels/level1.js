@@ -30,7 +30,13 @@ game.Level1 = {
 
             this.player = me.entityPool.newInstanceOf("player_l1", 20, 40);
             me.game.world.addChild(this.player, 11);
-    
+
+            window.alert("Voce acabou de fundar sua empresa e ela se encontra no nivel 1 do CMMI:\n"+
+                    "Ainda sem maturidade e em completo caos.\n"+
+                    "Ajude a controlar o caos da sua empresa e colete todos os prazos, custos e pepinos que voce tem que resolver.\n"+
+                    "Aproveite e colete tambem os livros que te ajudarao a entender um pouco mais sobre o CMMI e melhorar sua empresa.\n"+
+                    "Colote pelo menos 10 de cada um dos itens para avacar!");
+
             this.getReady = new me.SpriteObject(
                 me.game.viewport.width/2 - 200,
                 me.video.getHeight()/2 - 100,
@@ -44,6 +50,7 @@ game.Level1 = {
                     game.data.start = true;
                     me.game.world.addChild(new ItemGenerator(), 0);
                 }).start();
+
         },
     
         onDestroyEvent: function() {

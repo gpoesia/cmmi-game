@@ -31,13 +31,18 @@ var game = {
 
         // LEvel 2 entities
         me.entityPool.add("player_l2", game.PlayerL2Entity);
+        me.entityPool.add("meurecurso", game.ExclamationEntity);
 
         // level 3 entities
         me.entityPool.add("hero", game.HeroEntity);
         me.entityPool.add("girl", game.GirlEntity);
 
         me.state.set(game.states.STATE_LEVEL_1, new game.Level1.Game());
-        me.state.set(game.states.STATE_LEVEL_2, new game.Level2.Game());
+        me.state.set(game.states.STATE_LEVEL_2, new game.Level2.MiniGame0());
+        me.state.set(game.states.STATE_LEVEL_2_1, new game.Level2.MiniGame1());
+        me.state.set(game.states.STATE_LEVEL_2_2, new game.Level2.MiniGame2());
+        me.state.set(game.states.STATE_LEVEL_2_3, new game.Level2.MiniGame3());
+        me.state.set(game.states.STATE_LEVEL_2_4, new game.Level2.MiniGame4());
         me.state.set(game.states.STATE_LEVEL_3_0_INIT, new game.Level3.MiniGame0());
         me.state.set(game.states.STATE_LEVEL_3_1, new game.Level3.MiniGame1());
         me.state.set(game.states.STATE_LEVEL_4_1, new game.Level4.MiniGame1());
@@ -149,11 +154,35 @@ game.resources = [
         src: "data/img/item_l1_0.png"
     },
 
+    {
+        name: "item_l1_1",
+        type: "image",
+        src: "data/img/item_l1_1.png"
+    },
+
+    {
+        name: "item_l1_2",
+        type: "image",
+        src: "data/img/item_l1_2.png"
+    },
+
+    {
+        name: "item_l1_3",
+        type: "image",
+        src: "data/img/item_l1_3.png"
+    },
+
     // Level 2 resources
     {
         name: "player_l2",
         type: "image",
         src: "data/img/player_L2.png"
+    },
+
+    {
+        name: "meurecurso",
+        type: "image",
+        src: "data/img/meurecurso.png"
     },
 
     {

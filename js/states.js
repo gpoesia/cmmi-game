@@ -18,6 +18,10 @@ function addGameState(name) {
 
 addGameState("STATE_LEVEL_1");
 addGameState("STATE_LEVEL_2");
+addGameState("STATE_LEVEL_2_1");
+addGameState("STATE_LEVEL_2_2");
+addGameState("STATE_LEVEL_2_3");
+addGameState("STATE_LEVEL_2_4");
 addGameState("STATE_LEVEL_3_0_INIT");
 addGameState("STATE_LEVEL_3_1");
 addGameState("STATE_LEVEL_4_1");

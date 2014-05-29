@@ -117,9 +117,17 @@ game.HUDL1.Container = me.ObjectContainer.extend({
     this.name = "HUD";
 
     // add our child score object at the top left corner
-    for (i = 0; i < game.ItemL1Types.length; i++)
+    for (i = 0; i < game.ItemL1Types.length; i++){
+        this.addChild(new game.HUDL1.IconItem(((i+1)*100)-65, 15, "item_l1_"+i));
         this.addChild(new game.HUDL1.ScoreItem((i+1)*100, 5, game.ItemL1Types[i]));
+    }
   }
+});
+
+game.HUDL1.IconItem = me.SpriteObject.extend({
+    init: function(x, y, image) {
+          this.parent(x, y, me.loader.getImage(image), 800, 600);
+    }
 });
 
 game.HUDL1.ScoreItem = me.Renderable.extend({
@@ -158,10 +166,10 @@ game.PlayerL1Entity = me.ObjectEntity.extend({
     init: function(x, y) {
           var settings = {};
           settings.image = me.loader.getImage('player_l1');
-          settings.width = 85;
-          settings.height = 60;
-          settings.spritewidth = 85;
-          settings.spriteheight = 60;
+          settings.width = 60;
+          settings.height = 70;
+          settings.spritewidth = 60;
+          settings.spriteheight = 70;
 
           this.parent(x, y, settings);
           this.alwaysUpdate = true;
@@ -169,8 +177,8 @@ game.PlayerL1Entity = me.ObjectEntity.extend({
           this.gravity = 0.98;
           this.maxVel = 7;
 
-          this.renderable.addAnimation("idle", [0]);
-          this.renderable.addAnimation("running", [0, 1, 2]);
+          this.renderable.addAnimation("idle", [9]);
+          this.renderable.addAnimation("running", [9, 12, 14, 16, 19, 21, 23, 1, 3, 6]);
           this.renderable.setCurrentAnimation("idle");
           this.animation = "idle";
 
@@ -243,7 +251,7 @@ game.PlayerL1Entity = me.ObjectEntity.extend({
 
 });
 
-game.ItemL1Types = ["book", "deadline", "cost", "cucumber"];//{book : 0, deadline : 1, cost : 2, cucumber : 3};
+game.ItemL1Types = ["book", "cucumber", "deadline", "cost"];
 
 game.ItemL1Entity = me.CollectableEntity.extend({
     init: function(x, y, type) {
@@ -252,9 +260,9 @@ game.ItemL1Entity = me.CollectableEntity.extend({
         console.log("tipo: "+this.itemType);
         settings.image = me.loader.getImage('item_l1_'+this.itemType);
         settings.width = 40;
-        settings.height = 33;
+        settings.height = 41;
         settings.spritewidth = 40;
-        settings.spriteheight = 33;
+        settings.spriteheight = 41;
 
         this.parent(x, y, settings);
         this.alwaysUpdate = true;
@@ -277,6 +285,14 @@ game.ItemL1Entity = me.CollectableEntity.extend({
             if (this.pos.y < 471) {
                 console.log("colidiu! tipo: "+this.itemType);
                 game.Level1.scores[game.ItemL1Types[this.itemType]] += 1;
+                var completeCount = 0;
+                console.log("length:"+game.ItemL1Types.length);
+                for (i = 0; i < game.ItemL1Types.length; i++){
+                    if (game.Level1.scores[game.ItemL1Types[i]] >= 10)
+                        completeCount++;
+                }
+                if (completeCount == game.ItemL1Types.length)
+                    window.alert("Parabens! Voce conseguiu.\nComece agora a melhorar sua empresa avancando pelos niveis do CMMI.");
             }
         }
 
@@ -290,14 +306,14 @@ var ItemGenerator = me.Renderable.extend({
         this.parent(new me.Vector2d(), me.game.viewport.width, me.game.viewport.height);
         this.alwaysUpdate = true;
         this.generate = 0;
-        this.itemFrequency = 90;
+        this.itemFrequency = 50;
         this.posY = 50;
     },
 
     update: function(dt) {
         if ((this.generate++ % this.itemFrequency) == 0) {
-            var posX = Math.round((Math.random() * 1000) % me.game.viewport.width);
-            var type = Math.round((Math.random() * 10) % 1) + 0;
+            var posX = Math.floor((Math.random() * 1000) % me.game.viewport.width);
+            var type = Math.floor((Math.random() * 10) % 4);
             var item = new me.entityPool.newInstanceOf("item_l1", posX, this.posY, type);
             console.log("Criando item... (tipo: "+type+")");
             me.game.world.addChild(item, 10);
@@ -318,7 +334,7 @@ var GroundL1Entity = me.ObjectEntity.extend({
         this.parent(x, y, settings);
         this.alawaysUpdate = true;
         this.gravity = 0;
-        this.collidable = true;
+        this.collidable = false;
         this.addShape(new me.Rect(new me.Vector2d(0, 0), me.game.viewport.width, 96));
     },
 
@@ -340,6 +356,9 @@ game.PlayerL2Entity = me.ObjectEntity.extend({
           this.renderable.addAnimation("up", [12,13,14,14]);
 
           this.direction = "down";
+
+          //Collidable
+          this.collidable = true;
     },
 
     update: function(dt) {
@@ -381,14 +400,98 @@ game.PlayerL2Entity = me.ObjectEntity.extend({
           }
 
           this.updateMovement();
-          
           if (this.vel.x != 0 || this.vel.y != 0){
             this.parent(dt);
             return true;
           }
 
+          console.log("posX: " + this.pos.x + " posY: " + this.pos.y);
           return false;
     },
+
+});
+
+game.ExclamationEntity = me.CollectableEntity.extend({
+	
+	init: function(x, y, settings) {
+    	
+    	settings.image = "meurecurso";
+    	settings.spritewidth = 36;
+    	settings.spriteheight = 36;
+   	    	    	      
+        // call the constructor
+        this.parent(x, y, settings);
+                
+        this.gravity = 0;
+        this.setFriction(0.5, 0.5);
+                       
+        this.collidable = true;        
+                            
+        this.renderable.addAnimation("down", [0,1,2]);
+        this.renderable.addAnimation("left", [3,4,5]);
+        this.renderable.addAnimation("right", [6,7,8]);
+        this.renderable.addAnimation("up", [9,10,11]);
+                
+		this.minX = x;
+        this.minY = y;
+        this.maxX = x + settings.width - settings.spritewidth;
+        this.maxY = y + settings.height - settings.spriteheight;
+        this.addShape(new me.Rect(new me.Vector2d(0, 0), 40, 33));
+
+        this.level21 = new game.Level2.MiniGame1();
+        this.level22 = new game.Level2.MiniGame2();
+        this.level23 = new game.Level2.MiniGame3();
+        this.level24 = new game.Level2.MiniGame4();
+	},
+	
+    update: function(dt) {    	        
+            
+        this.updateMovement();
+                  	                    
+        // update animation if necessary
+        if (this.vel.x!=0 || this.vel.y!=0) {
+            // update object animation
+            this.parent();
+            return true;
+        }
+        var res =  me.game.world.collide(this);    
+        if (res) {
+            // MiniGame1
+            if (game.Level2.scores.activity == 0) {
+                // Hardi coded positions 
+                this.pos.x = 354;
+                this.pos.y = 496;
+                game.Level2.scores.activity += 1;
+                this.level21.onResetEvent();
+            // MiniGame2
+            } else if (game.Level2.scores.activity == 1) {
+                // Hardcoded 
+                this.pos.x = 134;
+                this.pos.y = 498;
+                game.Level2.scores.activity += 1;
+                this.level22.onResetEvent();
+            // MiniGame3    
+            } else if (game.Level2.scores.activity == 2) {
+                // Hardcoded 
+                this.pos.x = 289;
+                this.pos.y = 111;
+                game.Level2.scores.activity += 1;
+                this.level23.onResetEvent();
+            } else if (game.Level2.scores.activity == 3) {
+                // Hardcoded 
+                game.Level2.scores.activity += 1;
+                this.level24.onResetEvent();
+            } else if (game.Level2.scores.activity == 4) {
+                alert("Parabéns, você concluiu o nível 2!");
+                // return to menu
+                me.game.remove(this);
+                return true
+
+            }        
+        }
+        return false;
+    },
+ 
 
 });
 

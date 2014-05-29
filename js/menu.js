@@ -41,10 +41,13 @@ game.MainMenu = me.ScreenObject.extend({
         this.titleFont = new me.Font("Verdana", "35px", "blue", "left");
 
         this.buttons = [
-            new LevelButton(350, 150, "Level 3", this.font, game.states.STATE_LEVEL_3_0_INIT),
-            new LevelButton(350, 200, "Level 4.1", this.font, game.states.STATE_LEVEL_4_1),
-            new LevelButton(350, 250, "Level 4.2", this.font, game.states.STATE_LEVEL_4_2),
-            new LevelButton(350, 300, "Level 5", this.font, game.states.STATE_LEVEL_5_1),
+            new LevelButton(350, 150, "Level 1", this.font, game.states.STATE_LEVEL_1),
+            new LevelButton(350, 200, "Level 2", this.font, game.states.STATE_LEVEL_2),
+            new LevelButton(350, 250, "Level 3", this.font, game.states.STATE_LEVEL_3_0_INIT),
+            new LevelButton(350, 300, "Level 4.1", this.font, game.states.STATE_LEVEL_4_1),
+            new LevelButton(350, 350, "Level 4.2", this.font, game.states.STATE_LEVEL_4_2),
+            new LevelButton(350, 400, "Level 5", this.font, game.states.STATE_LEVEL_5_1),
+            // new LevelButton(350, 450, "Level 5.2", this.font, game.states.STATE_LEVEL_5_2),
         ];
 
         for (var i = 0; i < this.buttons.length; i++) {

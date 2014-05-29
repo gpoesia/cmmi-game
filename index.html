@@ -10,13 +10,16 @@
         <script type="text/javascript" src="js/main.js"></script>
         <script type="text/javascript" src="js/states.js"></script>
         <script type="text/javascript" src="js/menu.js"></script>
-        <script type="text/javascript" src="js/levels/level4.js"></script>
+        <script type="text/javascript" src="js/levels/level1.js"></script>
+        <script type="text/javascript" src="js/levels/level2.js"></script>
         <script type="text/javascript" src="js/levels/level3.js"></script>
         <script type="text/javascript" src="js/dialog/dialog.js"></script>
+        <script type="text/javascript" src="js/levels/level4.js"></script>
         <script type="text/javascript" src="js/levels/level5.js"></script>
         <script type="text/javascript" src="js/clock.js"></script>
         <script type="text/javascript" src="js/entities/entities.js"></script>
         <script type="text/javascript" src="data/dialog/dialogues.js"></script>
+        <!--<script type="text/javascript" src="js/clock.js></script>-->
         <link type="text/css" rel="stylesheet" href="css/base.css"/>
         <link type="text/css" rel="stylesheet" href="js/jquery-ui/css/ui-lightness/jquery-ui-1.10.4.custom.min.css"/>
         <link type="text/css" rel="stylesheet" href="css/level3.css"/>
@@ -29,6 +32,75 @@
         <div id="game">
             <div id="screen">
                 <div id="game-dialog"></div>
+          </div>
+             <div id="level21" style="display: none;">
+                <p> Você irá realizar a reunião com cliente, para definir os requisitos do produto (Nessa situação um site!). Escolha as perguntas que você faria ao cliente para obtê-las, mas cuidado! Perguntas erradas podem fazer que seu projeto fique impossível. </p>
+                <form>
+                    <input class="cb" type="checkbox" id="Perg1" name="question" value="Correct1"> Qual o tema do seu Site?<br>
+                    <input class="cb" type="checkbox" id="Perg2" name="question" value="Correct2"> Quais os tipos de integração que o site terá com o cliente?<br>
+                    <input class="cb" type="checkbox" id="Perg3" name="question" value="Correct3"> Você gostaria que o site funcionasse nos principais navegadores?<br>
+                    <input class="cb" type="checkbox" id="Perg4" name="question" value="Correct4"> O site terá de interagir com outros sites?<br>
+                    <input class="cb" type="checkbox" id="Perg5" name="question" value="Incorrect1"> Qual linguagem de programação você deseja que seja utilizada?<br>
+                    <input class="cb" type="checkbox" id="Perg6" name="question" value="Incorrect2"> Você tem certeza de que este é o melhor tema para o site?<br>
+                    <input class="cb" type="checkbox" id="Perg7" name="question" value="Incorrect3"> Quais são os casos de uso existente?<br>
+                    <input class="cb" type="checkbox" id="Perg8" name="question" value="Incorrect4"> Qual browser ele deve funcionar?<br>
+                    <input class="cb" type="button" id="botao" value="Perguntar"> 
+                </form>
+            </div>
+            <div id="level22" style="display: none;">
+                <p>  Você precisa, agora, fazer o planejamento de tempo. O projeto inicia-se dia 05/05/2014 e deverá ser entregue na segunda-feira 05/12/2014 (mm/dd/yyyy). Estão à sua disposição as equipes A e B, as quais você irá manejar para realiazar o projeto. Alguns detalhes: TimeA possui apenas 20h sobrando (+16h extras) e custa R$45,00/h; TimeB possui 40h (+16h extras) e custo de R$24,00; O projeto deverá ter custo máximo de R$2200,00. Obs: Cada atividade deve ter ao menos 1d e, além disso, uma próxima atividade só pode ser iniciada quando a atual for finalizada.</p>
+                <form>
+                    <p> Tarefa &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Início &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Términio &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Time </p>   
+                    Criar site map &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; <input class="date" type="date" id="1Date" name="Date1" value=>
+                    &nbsp; &nbsp; &nbsp; &nbsp;<input class="date" type="date" id="2Date" name="Date2" value=> 
+                    &nbsp; &nbsp; &nbsp; &nbsp;<input class="team" type="text" id="Team1" name="Team"  size="20" value=""> <br>
+                    Criar wireframe &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <input class="date" type="date" id="3Date" name="Date3" value=>
+                    &nbsp; &nbsp; &nbsp; &nbsp;<input class="date" type="date" id="4Date" name="Date4" value=>
+                    &nbsp; &nbsp; &nbsp; &nbsp;<input class="team" type="text" id="Team3" name="Team"  size="20" value=""> <br>
+                    Design das páginas &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <input class="date" type="date" id="5Date" name="Date1" value=>
+                    &nbsp; &nbsp; &nbsp; &nbsp;<input class="date" type="date" id="6Date" name="Date2" value=> 
+                    &nbsp; &nbsp; &nbsp; &nbsp;<input class="team" type="text" id="Team5" name="Team"  size="20" value=""> <br>
+                    Criar os Casos de Uso &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; <input class="date" type="date" id="7Date" name="Date1" value=>
+                    &nbsp; &nbsp; &nbsp; &nbsp;<input class="date" type="date" id="8Date" name="Date2" value=> 
+                    &nbsp; &nbsp; &nbsp; &nbsp;<input class="team" type="text" id="Team7" name="Team"  size="20" value=""> <br>
+                    Criar/Testar Funcionalidades &nbsp;  &nbsp; &nbsp; <input class="date" type="date" id="9Date" name="Date1" value=>
+                    &nbsp; &nbsp; &nbsp; &nbsp;<input class="date" type="date" id="10Date" name="Date2" value=> 
+                    &nbsp; &nbsp; &nbsp; &nbsp;<input class="team" type="text" id="Team9" name="Team"  size="20" value=""> <br>
+                    Configurar servidor &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; <input class="date" type="date" id="11Date" name="Date1" value=>
+                    &nbsp; &nbsp; &nbsp; &nbsp;<input class="date" type="date" id="12Date" name="Date2" value=> 
+                    &nbsp; &nbsp; &nbsp; &nbsp;<input class="team" type="text" id="Team11" name="Team"  size="20" value=""> <br>
+                    Desenvolver protótipo &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; <input class="date" type="date" id="13Date" name="Date1" value=>
+                    &nbsp; &nbsp; &nbsp; &nbsp;<input class="date" type="date" id="14Date" name="Date2" value=> 
+                    &nbsp; &nbsp; &nbsp; &nbsp;<input class="team" type="text" id="Team13" name="Team"  size="20" value=""> <br>
+                    <input class="date" type="button" id="botao2" value="Salvar"> 
+                </form>
+            </div>
+            <div id="level23" style="display: none;">
+                <p>  Selecione atividades que você julga crítico para que o projeto seja entegre no prazo. Para essas atividades, serão geradas atividades corretivas que serão adicionadas ao planejamento. Obs: Para esse estágio o número mágico são 2 atividades.</p>
+                <form>
+                <img src="images/graph.png">
+                <form>
+                    <input class="cb" type="checkbox" id="lv3Perg1" name="question" value="button"> Criar site map<br>
+                    <input class="cb" type="checkbox" id="lv3Perg2" name="question" value="button"> Criar wireframe<br>
+                    <input class="cb" type="checkbox" id="lv3Perg3" name="question" value="button"> Design das páginas<br>
+                    <input class="cb" type="checkbox" id="lv3Perg4" name="question" value="button"> Criar os Casos de Uso<br>
+                    <input class="cb" type="checkbox" id="lv3Perg5" name="question" value="button"> Criar/Testar Funcionalidades<br>
+                    <input class="cb" type="checkbox" id="lv3Perg6" name="question" value="button"> Configurar servidor<br>
+                    <input class="cb" type="checkbox" id="lv3Perg7" name="question" value="button"> Desenvolver protótipo<br>
+                    <input class="cb" type="button" id="botao3" value="Enviar"> 
+                </form>
+            </div>
+            <div id="level24" style="display: none;">
+                <p> Essa prática requer a interação prática para sua equipe. Selecione práticas as quais você acha que podem deixar sua equipe mais motivada!.</p>
+                <form>
+                    <input class="cb" type="checkbox" id="lv4Perg1" name="question" value="button"> Busque aproximar a sua equipe<br>
+                    <input class="cb" type="checkbox" id="lv4Perg2" name="question" value="button"> Não auxilie seus pares, eles são seus concorrentes<br>
+                    <input class="cb" type="checkbox" id="lv4Perg3" name="question" value="button"> Dê feedbacks<br>
+                    <input class="cb" type="checkbox" id="lv4Perg4" name="question" value="button"> Não celebre conquistas, isso pode virar rotina<br>
+                    <input class="cb" type="checkbox" id="lv4Perg5" name="question" value="button"> Estimule seus funcionários a terem ideias<br>
+                    <input class="cb" type="checkbox" id="lv4Perg6" name="question" value="button"> Evite fazer parcerias<br>
+                    <input class="cb" type="button" id="botao4" value="Enviar"> 
+                </form>
             </div>
         </div>
     </body>

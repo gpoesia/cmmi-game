@@ -27,6 +27,14 @@ var game = {
     loaded: function() {
         me.state.set(me.state.READY, new game.TitleScreen());
         me.state.set(me.state.MENU, new game.MainMenu());
+        
+        // Level 1 entities
+        me.entityPool.add("player_l1", game.PlayerL1Entity);
+        me.entityPool.add("item_l1", game.ItemL1Entity);
+
+        // LEvel 2 entities
+        me.entityPool.add("player_l2", game.PlayerL2Entity);
+        me.entityPool.add("meurecurso", game.ExclamationEntity);
 
         // level 3 entities
         me.entityPool.add("hero", game.HeroEntity);
@@ -39,6 +47,12 @@ var game = {
         me.entityPool.add("boss", game.BossEntity);
         me.entityPool.add("boss2", game.BossFinalEntity);
 
+        me.state.set(game.states.STATE_LEVEL_1, new game.Level1.Game());
+        me.state.set(game.states.STATE_LEVEL_2, new game.Level2.MiniGame0());
+        me.state.set(game.states.STATE_LEVEL_2_1, new game.Level2.MiniGame1());
+        me.state.set(game.states.STATE_LEVEL_2_2, new game.Level2.MiniGame2());
+        me.state.set(game.states.STATE_LEVEL_2_3, new game.Level2.MiniGame3());
+        me.state.set(game.states.STATE_LEVEL_2_4, new game.Level2.MiniGame4());
         me.state.set(game.states.STATE_LEVEL_3_0_INIT, new game.Level3.MiniGame0());
         me.state.set(game.states.STATE_LEVEL_3_1, new game.Level3.MiniGame1());
         me.state.set(game.states.STATE_LEVEL_3_2, new game.Level3.MiniGame2());
@@ -139,8 +153,95 @@ game.resources = [
     },
 
     {
-        name: "girl",
-        type:"image",
+        name: "getready",
+        type: "image",
+        src: "data/img/getready.png"
+    },
+
+    // Level 1 resources
+    {
+        name: "background_l1",
+        type: "image",
+        src: "data/img/background_l1.png"
+    },
+
+    {
+        name: "ground_l1",
+        type: "image",
+        src: "data/img/ground_l1.png"
+    },
+
+    {
+        name: "player_l1",
+        type: "image",
+        src: "data/img/player_l1.png"
+    },
+
+    {
+        name: "item_l1_0",
+        type: "image",
+        src: "data/img/item_l1_0.png"
+    },
+
+    {
+        name: "item_l1_1",
+        type: "image",
+        src: "data/img/item_l1_1.png"
+    },
+
+    {
+        name: "item_l1_2",
+        type: "image",
+        src: "data/img/item_l1_2.png"
+    },
+
+    {
+        name: "item_l1_3",
+        type: "image",
+        src: "data/img/item_l1_3.png"
+    },
+
+    // Level 2 resources
+    {
+        name: "player_l2",
+        type: "image",
+        src: "data/img/player_L2.png"
+    },
+
+    {
+        name: "meurecurso",
+        type: "image",
+        src: "data/img/meurecurso.png"
+    },
+
+    {
+        name: "metatiles32x32",
+        type: "image",
+        src: "data/map/tileset/metatiles32x32.png"
+    },
+
+    {
+        name: "office_tileset",
+        type: "image",
+        src: "data/map/tileset/office_tileset.png"
+    },
+
+    {
+        name: "characters_l2",
+        type: "image",
+        src: "data/map/tileset/characters_l2.png"
+    },
+
+    {
+        name: "level_2",
+        type: "tmx",
+        src: "data/map/map_level_2.tmx"
+    },
+
+    // Level 3 resources
+    {
+        name: "girl", 
+        type: "image", 
         src: "data/img/girl.png"
     },
 

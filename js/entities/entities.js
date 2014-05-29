@@ -120,8 +120,13 @@ game.HeroEntity = game.BaseEntity.extend({
     		this.pos.x -= res.x;
     		this.pos.y -= res.y;    
     		
-            if ( res.obj.level32 && !res.obj.level32.isFinished() ){
-                res.obj.level32.onResetEvent();	 		    		 		    		    		    		   		    		      		    		    		    			    		    				    	
+            if ( res.obj.level32 ){
+                console.log("32");
+                if (game.data.level31 == true) {
+                   res.obj.level32.onResetEvent();   
+                } else {
+                    this.doTalk( res.obj );
+                }; 		    		 		    		    		    		   		    		      		    		    		    			    		    				    	
             }
             else if ( res.obj.level31 && !res.obj.level31.isFinished() ){
                 res.obj.level31.onResetEvent();                                                                                                                                                                                 
@@ -664,7 +669,7 @@ game.BossEntity = game.BaseEntity.extend({
         this.maxY = y + settings.height - settings.spriteheight;
 
         this.level32 = new game.Level3.MiniGame2();
-                                                                                                                                                                                                            
+        this.dialog = new game.Dialog( DIALOGUES[ this.name ], this.onDialogReset.bind(this), this.onDialogShow.bind(this));                                                                                                                                                                                 
     },
     
     update: function() {                
@@ -738,7 +743,8 @@ game.BossFinalEntity = game.BaseEntity.extend({
         this.maxX = x + settings.width - settings.spritewidth;
         this.maxY = y + settings.height - settings.spriteheight;
                                                                                                                                                                 
-        this.level31 = new game.Level3.MiniGame1();         
+        this.level31 = new game.Level3.MiniGame1();
+        this.dialog = new game.Dialog( DIALOGUES[ this.name ], this.onDialogReset.bind(this), this.onDialogShow.bind(this));       
     },
     
     update: function() {                

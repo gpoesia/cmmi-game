@@ -5,7 +5,7 @@ function HideMelonJS() {
 }
 
 function ShowMelonJS() {
-    $("#screen").css("display", "inline");
+    $("#screen").css("display", "block");
 }
 
 function Clear(divId) {
@@ -49,7 +49,6 @@ game.Level3 = {
         },
 
         onResetEvent: function() {
-            game.data.level31 = true;
             console.log("Resetting level 3.1");
             HideMelonJS();
             $("#game").append("<div id='level31'></div>");
@@ -57,13 +56,14 @@ game.Level3 = {
         },
 
         onDestroyEvent: function() {
+            game.data.level31 = true;
             $("#level31").replaceWith("");
             ShowMelonJS();
         },
 
 
         play: function() {
-            $("#level31").append("<p>Você, nosso mais novo estagiário de desenvolvimento, tem de ajudar o nosso especialista em requisitos, o Rodolfo."+" Nosso último estagiário misturou os requisitos que tinham de voltar pra prancheta com os prontos para implementação, precisamos que você os reorganize e submeta para aprovação do chefe!");
+            $("#level31").append("<p>Você, nosso mais novo estagiário de desenvolvimento, tem de ajudar o nosso Gerente de Requisitos, o Rodolfo."+" Nosso último estagiário misturou os requisitos que tinham de voltar pra prancheta com os prontos para implementação, precisamos que você os reorganize e submeta para aprovação do chefe!");
             $("#level31").append("<div class=\"cf nestable-lists\">" +
                 "<div class=\"dd\" id=\"nestable\">"+
                     "<ol class=\"dd-list\">"+
@@ -104,7 +104,7 @@ game.Level3 = {
                     "</ol>"+
                 "</div>"+
               "</div>"+
-              "<input type='button' id='tryButton' value='Enviar ao Rodolfo'/>");
+              "<input type='button' id='tryButton' value='Entregar ao Rodolfo'/>");
             
             $('#nestable2 > .dd-list').randomize('li');
 
@@ -120,7 +120,7 @@ game.Level3 = {
 
             self = this;
             $("#tryButton").click(function() {
-                if (self.evaluateQuantitativeGoals() || true) {
+                if (self.evaluateQuantitativeGoals()) {
                     
                     // return to map
                     self.onDestroyEvent();
@@ -135,9 +135,9 @@ game.Level3 = {
         evaluateQuantitativeGoals: function() {
             var classifiedList = $('#nestable').nestable('serialize');
             var requirementsList = $('#nestable2').nestable('serialize');
-            var requirementListSize = 6;
+            var requirementListSize = 5;
             var rFirstID = 4;
-            var badRequirimentListSize = 2;
+            var badRequirimentListSize = 3;
             var bFirstID = rFirstID + requirementListSize;
             var correct = false;
             
@@ -172,7 +172,7 @@ game.Level3 = {
             }
 
             if (correct == true) {
-                alert("Bom trabalho, a equipe de requisitos agora deve fazer a parte dela! O líder do time de desenvolvimento quer sua opinião, encontre-o e descubra o que ele quer.");
+                alert("Bom trabalho, a equipe de requisitos agora deve fazer a parte dela! Nosso desenhista quer sua opinião, encontre-o e descubra o que ele quer.");
                 self.finished = true;
                 return true;
             };
@@ -548,7 +548,12 @@ game.Level3 = {
             else {
                 alert_string = alert_string + "A interface gráfica está certa!\n";
             }
-            alert(alert_string);
+
+            if (correct) {
+                alert("Parabéns estágiario, você fez um bom trabalho ao concluir o nível 3 do CMMI e será contratado!")
+            } else {
+                alert(alert_string);
+            };
 
             return correct;
         },
